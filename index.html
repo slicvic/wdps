@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>What do people say?</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.css">
+</head>
+<body>
+    <div id="app" class="container text-center">
+        <form>
+            <h1 class="mt-5">What do people say?</h1>
+            <div class="form-group">
+                <input class="form-control form-control-lg" type="text" required v-model="q[0]">
+            </div>
+            <div class="m-2">vs.</div>
+            <div class="form-group">
+                <input class="form-control form-control-lg" type="text" required v-model="q[1]">
+            </div>
+            <button type="button" class="btn btn-primary btn-lg" v-on:click="search" v-bind:disabled="searching">Check</button>
+        </form>
+        <div class="mt-4" v-show="show_result">
+            <h2>People said</h2>
+            <canvas id="chart" width="100" height="100"></canvas>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.js"></script>
+    <script>
+        window.app = new Vue({
+            el: '#app',
+            data: {
+                searching: false,
+                show_result: false,
+                q: ['', ''],
+                result: [0, 0]
+            },
+            mounted: function() {
+       
+            },
+            methods: {
+                search: function() {
+                    var that = this;
+                    this.searching = true;
+                    this.show_result = false;
+                    $.getJSON('/search.php', 'q[]=' + this.q[0] + '&q[]=' + this.q[1]).done(function(data) {
+                        that.searching = false;
+                        that.show_result = true;
+                        if (typeof data == 'object') {
+                            var counts = Object.values(data);
+                            that.result[0] = counts[0]
+                            that.result[1] = counts[1];
+                            setTimeout(function() {
+                                var canvas = document.getElementById('chart');
+                                var ctx = canvas.getContext('2d');
+                                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                                new Chart(canvas, {
+                                    type: 'pie',
+                                    data: {
+                                        labels: that.q,
+                                        datasets: [
+                                            {
+                                                backgroundColor: ['#3e95cd', '#8e5ea2'],
+                                                data: that.result
+                                            }
+                                        ]
+                                    }
+                                });
+                            }, 100);
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
