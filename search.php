@@ -7,7 +7,6 @@ function get_google_result_count($q) {
     curl_setopt($ch, CURLOPT_URL, $url); 
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
     $res = curl_exec($ch);
-    echo $url;exit;
     curl_close($ch); 
     preg_match('/About ([0-9,]+) results/', $res, $matches, PREG_OFFSET_CAPTURE);
     if (!empty($matches[1][0])) {
