@@ -1,7 +1,7 @@
 <?php
-//header('Content-Type: application/json');
+header('Content-Type: application/json');
 
-function get_google_result_count($q) {
+function getGoogleHitCount($q) {
     $url = 'https://www.google.com/search?q="' . urlencode($q) . '"';
     $ch = curl_init(); 
     curl_setopt($ch, CURLOPT_URL, $url); 
@@ -17,9 +17,23 @@ function get_google_result_count($q) {
 
 if (!empty($_GET['q']) && is_array($_GET['q'])) {
     $res = [];
+
     foreach ($_GET['q'] as $q) {
-        $res[$q] = get_google_result_count($q);
+        $hits = getGoogleHitCount($q);
+        $res[] = [
+            'q' => $q,
+            'hits' => $hits,
+            'hitsFormatted' => number_format($hits)
+        ];
     }
+
+    usort($res, function($a, $b) {
+        if ($a['hits'] === $b['hits']) {
+            return 0;
+        }
+        return ($a['hits'] > $b['hits']) ? -1 : 1;
+    });
+
     echo json_encode($res);
 }
 

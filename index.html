@@ -12,69 +12,29 @@
     <div id="app" class="container text-center">
         <form>
             <h1 class="mt-5">What do people say?</h1>
-            <div class="form-group">
-                <input class="form-control form-control-lg" type="text" required v-model="q[0]">
+            <div v-for="(qq, i) in q">
+                <div class="m-2" v-show="i > 0">vs.</div>
+                <div class="form-group">
+                    <input class="form-control form-control-lg" type="text" required v-model="q[i]">
+                    <button type="button" class="btn btn-link" v-on:click="removeQ(i)" v-show="i > 1" v-bind:disabled="searching">Remove</button>
+                </div>
             </div>
-            <div class="m-2">vs.</div>
-            <div class="form-group">
-                <input class="form-control form-control-lg" type="text" required v-model="q[1]">
-            </div>
-            <button type="button" class="btn btn-primary btn-lg" v-on:click="search" v-bind:disabled="searching">Check</button>
         </form>
-        <div class="mt-4" v-show="show_result">
+        <div class="my-3">
+            <button type="button" class="btn btn-primary" v-on:click="addQ" v-bind:disabled="searching">Add</button>
+        </div>
+        <button type="button" class="btn btn-primary btn-lg" v-on:click="search" v-bind:disabled="searching">Check</button>
+        <div class="mt-4" v-show="showResult">
             <h2>People said</h2>
+            <div v-for="(r, i) in result">
+                #{{ i + 1 }} - {{ r.q }} - {{ r.hitsFormatted }}
+            </div>
             <canvas id="chart" width="100" height="100"></canvas>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.js"></script>
-    <script>
-        window.app = new Vue({
-            el: '#app',
-            data: {
-                searching: false,
-                show_result: false,
-                q: ['', ''],
-                result: [0, 0]
-            },
-            mounted: function() {
-       
-            },
-            methods: {
-                search: function() {
-                    var that = this;
-                    this.searching = true;
-                    this.show_result = false;
-                    $.getJSON('/search.php', 'q[]=' + this.q[0] + '&q[]=' + this.q[1]).done(function(data) {
-                        that.searching = false;
-                        that.show_result = true;
-                        if (typeof data == 'object') {
-                            var counts = Object.values(data);
-                            that.result[0] = counts[0]
-                            that.result[1] = counts[1];
-                            setTimeout(function() {
-                                var canvas = document.getElementById('chart');
-                                var ctx = canvas.getContext('2d');
-                                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                                new Chart(canvas, {
-                                    type: 'pie',
-                                    data: {
-                                        labels: that.q,
-                                        datasets: [
-                                            {
-                                                backgroundColor: ['#3e95cd', '#8e5ea2'],
-                                                data: that.result
-                                            }
-                                        ]
-                                    }
-                                });
-                            }, 100);
-                        }
-                    });
-                }
-            }
-        });
-    </script>
+    <script src="assets/js/app.js"></script>
 </body>
 </html>
