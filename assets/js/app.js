@@ -6,6 +6,9 @@ window.app = new Vue({
         q: ['' , ''],
         result: []
     },
+    mounted: function() {
+        $(this.$el).removeClass('d-none');
+    },
     methods: {
         addQ: function() {
             this.showResult = false;
@@ -28,13 +31,14 @@ window.app = new Vue({
 
             $.getJSON('/search.php', params.join('&')).done(function(res) {
                 that.searching = false;
-                that.showResult = true;
 
-                if (typeof res != 'object') {
+                if (typeof res !== 'object') {
                     return;
                 }
 
                 that.result = res;
+
+                that.showResult = true;
 
               /*  data.forEach(d => {
                     that.result.push(d);
@@ -58,7 +62,6 @@ window.app = new Vue({
                 }, 100);*/
             }).fail(function() {
                 that.searching = false;
-                that.showResult = true;
             });
         }
     }
