@@ -4,37 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>What do people say?</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>What do people say? - Find out what phrases people say the most</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/css/app.min.css">
 </head>
 <body>
     <div id="app" class="container text-center d-none">
-        <form>
-            <h1 class="mt-5">What do people say?</h1>
-            <div v-for="(qq, i) in q">
-                <div class="m-2" v-show="i > 0">vs.</div>
-                <div class="form-group">
-                    <input class="form-control form-control-lg" type="text" required v-model="q[i]">
-                    <button type="button" class="btn btn-link" v-on:click="removeQ(i)" v-show="i > 1" v-bind:disabled="searching">Remove</button>
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                <h1 class="mt-5">What do people say?</h1>
+
+                <form v-show="!showResults">Type in some phrases to see what people say the most.<br>For example, <strong class="text-warning">should we</strong> vs. <strong class="text-warning">shall we</strong>.</p>
+                    <div v-for="(phrase, i) in phrases">
+                        <div class="m-2" v-show="i > 0">vs.</div>
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <input
+                                    class="form-control form-control-lg"
+                                    type="text" 
+                                    placeholder="Enter a phrase"
+                                    v-bind:class="{ 'is-invalid': showErrors && phrase.trim().length === 0 }"
+                                    v-bind:disabled="searching"
+                                    v-model="phrases[i]">
+                                <div class="invalid-feedback" v-show="showErrors && phrase.trim().length === 0">Please enter a phrase.</div>
+                            </div>
+                            <div class="flex-shrink-1">
+                                <button type="button" class="btn btn-link text-danger" v-on:click="removePhrase(i)" v-show="phrases.length > minPhrases" v-bind:disabled="searching"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="my-3">
+                        <button type="button" class="btn btn-link" v-on:click="addPhrase" v-bind:disabled="searching" v-show="phrases.length < maxPhrases">Add Another Phrase</button>
+                    </div>
+                    <button type="button" class="btn btn-primary btn-lg" v-on:click="search" v-bind:disabled="searching">{{ searching ? 'Searching...' : 'Search'}}</button>
+                </form>
+
+                <div class="mt-4" v-show="showResults">
+                    <h4 class="font-italic">{{ results.totalFormatted }} people have spoken...</h4>
+                    <div class="my-4">
+                        <div v-for="(phrase, i) in results.phrases">
+                            {{ phrase.percent }}% said <strong>{{ phrase.text }}</strong>
+                        </div>
+                    </div>
+                    <div class="chart-container mx-auto">
+                        <canvas ref="chart_canvas"></canvas>
+                    </div>
+                    <button type="button" class="btn btn-link text-primary mt-4" v-on:click="showResults = false">Try Again!</button>
                 </div>
             </div>
-        </form>
-        <div class="my-3">
-            <button type="button" class="btn btn-primary" v-on:click="addQ" v-bind:disabled="searching">Add</button>
-        </div>
-        <button type="button" class="btn btn-primary btn-lg" v-on:click="search" v-bind:disabled="searching">Check</button>
-        <div class="mt-4" v-show="showResult">
-            <h2>People said</h2>
-            <div v-for="(r, i) in result">
-                #{{ i + 1 }} - {{ r.q }} - {{ r.hitsFormatted }}
-            </div>
-            <canvas id="chart" width="100" height="100"></canvas>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.js"></script>
-    <script src="assets/js/app.js"></script>
+    <script src="assets/js/app.min.js"></script>
 </body>
 </html>

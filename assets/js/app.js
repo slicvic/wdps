@@ -1,65 +1,95 @@
-window.app = new Vue({
+new Vue({
     el: '#app',
     data: {
         searching: false,
-        showResult: false,
-        q: ['' , ''],
-        result: []
+        showResults: false,
+        showErrors: false,
+        maxPhrases: 5,
+        minPhrases: 2,
+        phrases: ['', ''],
+        results: {
+            total: 0,
+            totalFormatted: 0,
+            phrases: [
+                // e.g.
+                // {
+                //     text: 'hello',
+                //     total: 1000,
+                //     totalFormatted: '1,000',
+                //     percent: 50
+                // }
+            ]
+        }
     },
     mounted: function() {
         $(this.$el).removeClass('d-none');
     },
     methods: {
-        addQ: function() {
-            this.showResult = false;
-            this.q.push('');
+        addPhrase: function() {
+            if (this.phrases.length < this.maxPhrases) {
+                this.phrases.push('');
+            }
         },
-        removeQ: function(i) {
-            this.showResult = false;
-            this.q.splice(i, 1);
+        removePhrase: function(i) {
+            this.phrases.splice(i, 1);
+        },
+        validateForm: function() {
+            return !this.phrases.some(function(phrase) {
+                return phrase.trim().length === 0;
+            });
         },
         search: function() {
-            this.showResult = false;
+            this.showErrors = false;
+
+            if (!this.validateForm()) {
+                this.showErrors = true;
+                return;
+            }
+
+            this.showResults = false;
             this.searching = true;
 
             var that = this;
             var params = [];
 
-            this.q.forEach(function(q) {
-                params.push('q[]=' + q);
+            this.phrases.forEach(function(phrase) {
+                params.push('phrases[]=' + phrase);
             });
 
-            $.getJSON('/search.php', params.join('&')).done(function(res) {
+            var canvas = $(this.$refs.chart_canvas)[0];
+            var ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            $.getJSON('/search.php', params.join('&')).done(function(results) {
+                that.results = results;
                 that.searching = false;
 
-                if (typeof res !== 'object') {
+                if (results.total < 1) {
                     return;
                 }
 
-                that.result = res;
-
-                that.showResult = true;
-
-              /*  data.forEach(d => {
-                    that.result.push(d);
-                });
+                that.showResults = true;
 
                 setTimeout(function() {
-                    var canvas = document.getElementById('chart');
-                    var ctx = canvas.getContext('2d');
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    var chartData = [];
+                    var chartLabels = [];
+                    that.results.phrases.forEach(function(phrase) {
+                        chartLabels.push(phrase.text);
+                        chartData.push(phrase.percent);
+                    });
 
                     new Chart(canvas, {
                         type: 'pie',
                         data: {
-                            labels: that.q,
+                            labels: chartLabels,
                             datasets: [{
                                 backgroundColor: ['#3e95cd', '#8e5ea2'],
-                                data: that.result
+                                data: chartData
                             }]
                         }
                     });
-                }, 100);*/
+                }, 100);
+                
             }).fail(function() {
                 that.searching = false;
             });
