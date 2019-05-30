@@ -120,7 +120,12 @@
                     // Render chart (small timeout needed for rotate animation)
                     setTimeout(function() {
                         that.chart = new Chart(canvas, {
-                            type: 'doughnut',
+                            type: 'pie',
+                            options: {
+                                legend: {
+                                    display: false
+                                }
+                            },
                             data: {
                                 labels: chartLabels,
                                 datasets: [{
