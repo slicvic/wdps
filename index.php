@@ -27,7 +27,7 @@
         </header>
         <main class="row">
             <div class="col-md-6 mx-auto">
-                <form class="form" v-show="!showResults">
+                <form class="form" action="search.php" method="post" v-show="!showResults">
                     <div v-for="(phrase, i) in phrases">
                         <div class="form__vs" v-show="i > 0">vs.</div>
                         <div class="d-flex">
