@@ -58,7 +58,7 @@
                         continue;
                     }
                     
-                    var phrase = this.phrases[i].replace(/\s\s+/g, ' ');
+                    var phrase = this.phrases[i].trim().replace(/\s\s+/g, ' ');
 
                     if (phrase == '') {
                         valid = false;
