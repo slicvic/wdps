@@ -8,10 +8,11 @@
             validationErrors: [],
             maxPhrases: 3,
             minPhrases: 2,
+            //phrases: ['jordan goat', 'kobe goat', 'lebron goat'],
             phrases: ['', ''],
             placeholders: ['e.g. jordan goat', 'e.g. lebron goat', 'e.g. kobe goat'],
             chart: null,
-            chartColors: ['#ff9ff3', '#feca57', '#1dd1a1'],
+            chartColors: ['#5d5d5a', '#ffcdab', '#d2c8c8'],
             results: {}
         },
         computed: {
