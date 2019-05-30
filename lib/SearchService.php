@@ -13,7 +13,7 @@ class SearchService {
     /**
      * @param string $searchEngine
      */
-    public function __construct(string $searchEngine = 'bing')
+    public function __construct(string $searchEngine = null)
     {
         $this->setSearchEngine($searchEngine ?: self::SEARCH_ENGINE_BING);
     }
@@ -23,7 +23,7 @@ class SearchService {
      * @param string site e.g. twitter.com
      * @return int
      */
-    public function search(string $phrase, string $site = '')
+    public function search(string $phrase, string $site = null)
     {
         $q = sprintf('"%s"', $phrase);
         if ($site) {
