@@ -20,13 +20,15 @@
             <h1 class="logo m-0">
                 <strong>W</strong>hat <strong>D</strong>o <strong>P</strong>eople <strong>S</strong>ay<strong>?</strong>
             </h1>
+            <div class="mt-2 mb-4" v-show="!showResults">
+                <p class="desc">Type in some phrases to see what people say the most.</p>
+                <p class="desc">For example, <strong class="text-secondary">jordan goat</strong> vs. <strong class="text-secondary">lebron goat</strong></p>
+            </div>
         </header>
         <main class="row">
             <div class="col-md-6 mx-auto">
                 <form class="mb-3" v-show="!showResults">
-                    <p class="desc">Type in some phrases to see what people say the most.</p>
-                    <p class="mb-3 desc">For example, <strong class="text-secondary">jordan goat</strong> vs. <strong class="text-secondary">lebron goat</strong></p>
-                    <div v-for="(phrase, i) in phrases">
+                    <div class="mb-3" v-bind:class=" { 'mb-4': i == 2 }" v-for="(phrase, i) in phrases">
                         <div class="m-2" v-show="i > 0">vs.</div>
                         <div class="d-flex">
                             <div class="flex-grow-1">
@@ -52,7 +54,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="my-3">
+                    <div class="mb-3">
                         <button
                             type="button"
                             class="btn btn-link add-phrase-btn"

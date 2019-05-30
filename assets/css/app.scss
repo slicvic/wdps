@@ -6,7 +6,9 @@ $colors: (
     secondary-light: #00bdba,
     tertiary: #6a4447,
     tertiary-dark: #89585c,
-    link: #b18589
+    link: #b18589,
+    placeholder: #f5ce97,
+    placeholder-invalid: #ee9aa2
 );
 
 body {
@@ -67,16 +69,17 @@ a:visited {
 }
 
 .phrase-input::placeholder {
-    color: #f5ce97;
-    opacity: 1;
+    color: map-get($colors, 'placeholder');
+    -webkit-text-fill-color: map-get($colors, 'placeholder');
 }
 
 .phrase-input.phrase-input.is-invalid::placeholder {
-    color: #ee9aa2;
+    color: map-get($colors, 'placeholder-invalid');
+    -webkit-text-fill-color: map-get($colors, 'placeholder-invalid');
 }
 
 .add-phrase-btn {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
 }
 
 .try-again-btn {
