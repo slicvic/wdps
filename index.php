@@ -69,7 +69,7 @@
                     </button>
                 </form>
                 <div class="mt-2" v-show="showResults">
-                    <h5 v-show="!results">Zero, zilch, zip, nada, nothing!</h5>
+                    <h5 class="my-4" v-show="!results">Zero, zilch, zip, nada, nothing!</h5>
                     <div v-show="results">
                         <div v-for="(phrase, i) in results.phrases">
                             <span v-bind:style="{ color: chartColors[i] }">{{ phrase.percent }}%</span> <span class="text-secondary">say</span> <strong v-bind:style="{ color: chartColors[i] }">{{ phrase.text }}</strong>
