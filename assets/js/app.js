@@ -1,76 +1,102 @@
-new Vue({
-    el: '#app',
-    data: {
-        searching: false,
-        showResults: false,
-        showErrors: false,
-        maxPhrases: 5,
-        minPhrases: 2,
-        phrases: ['', ''],
-        results: {
-            total: 0,
-            totalFormatted: 0,
-            phrases: [
-                // e.g.
-                // {
-                //     text: 'hello',
-                //     total: 1000,
-                //     totalFormatted: '1,000',
-                //     percent: 50
-                // }
-            ]
-        }
-    },
-    mounted: function() {
-        $(this.$el).removeClass('d-none');
-    },
-    methods: {
-        addPhrase: function() {
-            if (this.phrases.length < this.maxPhrases) {
-                this.phrases.push('');
+(function(Vue, $, Chart) {
+
+    new Vue({
+        el: '.js-app',
+        data: {
+            searching: false,
+            showResults: false,
+            validationErrors: [],
+            maxPhrases: 3,
+            minPhrases: 2,
+            phrases: ['', ''],
+            placeholders: ['Enter a phrase', 'Enter a phrase', 'Enter a phrase'],
+            chart: null,
+            chartColors: ['#ff9ff3', '#feca57', '#1dd1a1'],
+            results: {}
+        },
+        computed: {
+            showAddPhraseBtn: function() {
+                return this.phrases.length < this.maxPhrases;
+            },
+            showRemovePhraseBtn: function() {
+                return this.phrases.length > this.minPhrases;
             }
         },
-        removePhrase: function(i) {
-            this.phrases.splice(i, 1);
+        mounted: function() {
+            $(this.$el).removeClass('d-none');
+            $(this.$el).on('keypress', '.js-phrase-input', function(e) {
+                if (e.which === 13) {
+                    this.search();
+                }
+            }.bind(this));
         },
-        validateForm: function() {
-            return !this.phrases.some(function(phrase) {
-                return phrase.trim().length === 0;
-            });
-        },
-        search: function() {
-            this.showErrors = false;
+        methods: {
+            addPhrase: function() {
+                if (this.phrases.length < this.maxPhrases) {
+                    this.phrases.push('');
+                }
+            },
+            removePhrase: function(index) {
+                this.phrases.splice(index, 1);
+            },
+            hideResults: function() {
+                this.showResults = false;
+            },
+            handlePhraseInputKeyup: function(index) {
+                this.validatePhrases(index);
+            },
+            /**
+             * Validate all phrases or the phrase at the specified index.
+             * @param {integer} index Index of the phrase to validate.
+             * @return {boolean}
+             */
+            validatePhrases: function(index) {
+                var valid = true;
 
-            if (!this.validateForm()) {
-                this.showErrors = true;
-                return;
-            }
+                for (var i = 0; i < this.phrases.length; i++) {
+                    if (typeof index !== 'undefined' && index != i) {
+                        continue;
+                    }
+                    
+                    var phrase = this.phrases[i].replace(/\s\s+/g, ' ');
 
-            this.showResults = false;
-            this.searching = true;
+                    if (phrase == '') {
+                        valid = false;
+                        Vue.set(this.validationErrors, i, 'Phrase cannot be blank!');
+                    } else if (phrase.split(' ').length < 2) {
+                        valid = false;
+                        Vue.set(this.validationErrors, i, 'Phrase must be 2 or more words!');
+                    } else {
+                        Vue.set(this.validationErrors, i, '');
+                    }
+                }
 
-            var that = this;
-            var params = [];
-
-            this.phrases.forEach(function(phrase) {
-                params.push('phrases[]=' + phrase);
-            });
-
-            var canvas = $(this.$refs.chart_canvas)[0];
-            var ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            $.getJSON('/search.php', params.join('&')).done(function(results) {
-                that.results = results;
-                that.searching = false;
-
-                if (results.total < 1) {
+                return valid;
+            },
+            search: function() {
+                if (!this.validatePhrases()) {
                     return;
                 }
 
-                that.showResults = true;
+                this.showResults = false;
+                this.searching = true;
+                var that = this;
+                var params = [];
+                this.phrases.forEach(function(phrase) {
+                    params.push('phrases[]=' + phrase);
+                });
 
-                setTimeout(function() {
+                $.getJSON('/search.php', params.join('&')).done(function(response) {
+                    if (response.no_results) {
+                        that.results = false;
+                        that.searching = false;
+                        that.showResults = true;
+                        return;
+                    }
+
+                    that.results = response;
+
+                    // Prepare chart data
                     var chartData = [];
                     var chartLabels = [];
                     that.results.phrases.forEach(function(phrase) {
@@ -78,21 +104,38 @@ new Vue({
                         chartData.push(phrase.percent);
                     });
 
-                    new Chart(canvas, {
-                        type: 'pie',
-                        data: {
-                            labels: chartLabels,
-                            datasets: [{
-                                backgroundColor: ['#3e95cd', '#8e5ea2'],
-                                data: chartData
-                            }]
-                        }
-                    });
-                }, 100);
-                
-            }).fail(function() {
-                that.searching = false;
-            });
+                    // Clear canvas
+                    var canvas = $(that.$refs.chart_canvas)[0];
+                    canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+        
+                    // Destroy previous chart
+                    if (that.chart) {
+                        that.chart.destroy();
+                    }
+
+                    that.searching = false;
+                    that.showResults = true;
+
+                    // Render chart (small timeout needed for rotate animation)
+                    setTimeout(function() {
+                        that.chart = new Chart(canvas, {
+                            type: 'doughnut',
+                            data: {
+                                labels: chartLabels,
+                                datasets: [{
+                                    data: chartData,
+                                    backgroundColor: that.chartColors
+                                }]
+                            }
+                        });
+                    }, 100);
+                }).fail(function() {
+                    that.results = false;
+                    that.showResults = true;
+                    that.searching = false;
+                });
+            }
         }
-    }
-});
+    });
+    
+})(window.Vue, window.jQuery, window.Chart);

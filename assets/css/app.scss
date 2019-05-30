@@ -1,0 +1,95 @@
+
+
+$colors: (
+    primary: #ff5e5b,
+    secondary: #00cecb,
+    secondary-light: #00bdba,
+    tertiary: #6a4447,
+    tertiary-dark: #89585c,
+    link: #b18589
+);
+
+body {
+    font-family: 'Baloo', cursive;
+    color: map-get($colors, 'tertiary');
+}
+
+a,
+a:active,
+a:visited {
+    color: map-get($colors, 'link');
+    text-decoration: underline;
+}
+
+.logo,
+.logo strong {
+    color: map-get($colors, 'primary');
+    font-size: 3rem;
+}
+
+.logo strong {
+    font-size: 4rem;
+}
+
+.text-primary {
+    color: map-get($colors, 'primary') !important;
+}
+
+.text-secondary {
+    color: map-get($colors, 'secondary') !important;
+}
+
+.search-btn {
+    background-color: map-get($colors, 'secondary');
+    color: #fff;
+    font-size: 2rem;
+}
+
+.search-btn:hover {
+    background-color: map-get($colors, 'secondary-light');
+}
+
+.phrase-input,
+.phrase-input:focus,
+.phrase-input:disabled {
+    background-color: #faedca;
+    border: 2px solid #f2c078;
+    color: map-get($colors, 'tertiary');
+    font-size: 2rem;
+    padding: 30px;
+    text-align: center;
+}
+
+.phrase-input.is-invalid {
+    background-color: #fdf1f2;
+}
+
+.phrase-input::placeholder {
+    color: #f5ce97;
+    opacity: 1;
+}
+
+.phrase-input.phrase-input.is-invalid::placeholder {
+    color: #ee9aa2;
+}
+
+.add-phrase-btn {
+    font-size: 1.3rem;
+}
+
+.try-again-btn {
+    font-size: 2rem;
+    color: map-get($colors, 'secondary');
+}
+
+.add-phrase-btn,
+.add-phrase-btn:disabled,
+.remove-phrase-btn i {
+    color: map-get($colors, 'primary');
+}
+
+.add-phrase-btn:hover,
+.remove-phrase-btn:hover i,
+.try-again-btn:hover {
+    color: map-get($colors, 'tertiary-dark');
+}
