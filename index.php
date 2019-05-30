@@ -16,14 +16,16 @@
 </head>
 <body>
     <div class="container text-center d-none mt-3 js-app">
-        <h1 class="logo">
-            <strong>W</strong>hat <strong>D</strong>o <strong>P</strong>eople <strong>S</strong>ay<strong>?</strong>
-        </h1>
-        
-        <div class="row">
+        <header>
+            <h1 class="logo m-0">
+                <strong>W</strong>hat <strong>D</strong>o <strong>P</strong>eople <strong>S</strong>ay<strong>?</strong>
+            </h1>
+        </header>
+        <main class="row">
             <div class="col-md-6 mx-auto">
-                <form v-show="!showResults">
-                    <p>Type in some phrases to see what people say the most. For example, <strong class="text-secondary">jordan goat</strong> vs. <strong class="text-secondary">lebron goat</strong></p>
+                <form class="mb-3" v-show="!showResults">
+                    <p class="desc">Type in some phrases to see what people say the most.</p>
+                    <p class="mb-3 desc">For example, <strong class="text-secondary">jordan goat</strong> vs. <strong class="text-secondary">lebron goat</strong></p>
                     <div v-for="(phrase, i) in phrases">
                         <div class="m-2" v-show="i > 0">vs.</div>
                         <div class="d-flex">
@@ -64,23 +66,21 @@
                         {{ searching ? 'Searching...' : 'Search'}}
                     </button>
                 </form>
-
-                <div class="mt-4" v-show="showResults">
-                    <h4 class="mb-3" v-show="!results">Nothing!</h4>
-                    <div class="mt-4" v-show="results">
+                <div class="mt-2" v-show="showResults">
+                    <h4 v-show="!results">Zero, zilch, zip, nada, nothing!</h4>
+                    <div v-show="results">
                         <div v-for="(phrase, i) in results.phrases">
                             <span v-bind:style="{ color: chartColors[i] }">{{ phrase.percent }}%</span> <span class="text-secondary">say</span> <strong v-bind:style="{ color: chartColors[i] }">{{ phrase.text }}</strong>
                         </div>
                     </div>
-                    <div class="chart-container mx-auto my-4" v-show="results">
+                    <div class="chart-container mx-auto my-3" v-show="results">
                         <canvas ref="chart_canvas"></canvas>
                     </div>
                     <button type="button" class="btn btn-link try-again-btn" v-on:click="hideResults">Try Again!</button>
                 </div>
             </div>
-        </div>
-
-        <footer class="mt-5 text-center">
+        </main>
+        <footer class="text-center">
             <small>Created by <a href="http://www.slicvic.com">slicvic.com</a></small>
         </footer>
     </div>

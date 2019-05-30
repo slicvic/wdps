@@ -31,6 +31,10 @@ a:visited {
     font-size: 4rem;
 }
 
+.desc {
+    margin: 0;
+}
+
 .text-primary {
     color: map-get($colors, 'primary') !important;
 }
@@ -42,7 +46,6 @@ a:visited {
 .search-btn {
     background-color: map-get($colors, 'secondary');
     color: #fff;
-    font-size: 2rem;
 }
 
 .search-btn:hover {
@@ -55,8 +58,7 @@ a:visited {
     background-color: #faedca;
     border: 2px solid #f2c078;
     color: map-get($colors, 'tertiary');
-    font-size: 2rem;
-    padding: 30px;
+    -webkit-text-fill-color: map-get($colors, 'tertiary');
     text-align: center;
 }
 
@@ -92,4 +94,19 @@ a:visited {
 .remove-phrase-btn:hover i,
 .try-again-btn:hover {
     color: map-get($colors, 'tertiary-dark');
+}
+
+/* Extra small devices (portrait phones, less than 576px) */
+@media (max-width: 575px) {  
+    .logo {
+        font-size: 2rem;
+    }
+    
+    .logo strong {
+        font-size: 2.5rem;
+    }
+
+    .desc {
+        font-size: .8rem;
+    }
 }
