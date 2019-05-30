@@ -15,25 +15,25 @@
     <link rel="stylesheet" href="assets/css/app.min.css?_=<?= $cb ?>">
 </head>
 <body>
-    <div class="container text-center d-none mt-3 js-app">
+    <div class="app container d-none js-app">
         <header>
-            <h1 class="logo m-0">
+            <h1 class="logo">
                 <strong>W</strong>hat <strong>D</strong>o <strong>P</strong>eople <strong>S</strong>ay<strong>?</strong>
             </h1>
-            <div class="mt-2 mb-4" v-show="!showResults">
-                <p class="desc">Type in some phrases to see what people say the most.</p>
-                <p class="desc">For example, <strong class="text-secondary">jordan goat</strong> vs. <strong class="text-secondary">lebron goat</strong></p>
+            <div class="subhead" v-show="!showResults">
+                <p class="subhead__text">Type in some phrases to see what people say the most.</p>
+                <p class="subhead__text">For example, <strong class="text-secondary">jordan goat</strong> vs. <strong class="text-secondary">lebron goat</strong></p>
             </div>
         </header>
         <main class="row">
             <div class="col-md-6 mx-auto">
-                <form class="mb-3" v-show="!showResults">
-                    <div class="mb-3" v-bind:class=" { 'mb-4': i == 2 }" v-for="(phrase, i) in phrases">
-                        <div class="m-2" v-show="i > 0">vs.</div>
+                <form class="form" v-show="!showResults">
+                    <div v-for="(phrase, i) in phrases">
+                        <div class="form__vs" v-show="i > 0">vs.</div>
                         <div class="d-flex">
                             <div class="flex-grow-1">
                                 <input
-                                    class="form-control form-control-lg phrase-input js-phrase-input"
+                                    class="form__input form-control form-control-lg js-phrase-input"
                                     type="text"
                                     v-bind:placeholder="placeholders[i]"
                                     v-bind:class="{ 'is-invalid': validationErrors[i] }"
@@ -45,7 +45,7 @@
                             <div class="flex-shrink-1 align-self-center">
                                 <button 
                                     type="button"
-                                    class="btn btn-link remove-phrase-btn"
+                                    class="form__remove-btn btn btn-link"
                                     v-on:click="removePhrase(i)"
                                     v-show="showRemovePhraseBtn"
                                     v-bind:disabled="searching">
@@ -54,35 +54,33 @@
                             </div>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <button
-                            type="button"
-                            class="btn btn-link add-phrase-btn"
-                            v-on:click="addPhrase"
-                            v-bind:disabled="searching"
-                            v-show="showAddPhraseBtn">
-                            Add Another Phrase
-                        </button>
-                    </div>
-                    <button type="button" class="btn btn-lg search-btn" v-on:click="search" v-bind:disabled="searching">
+                    <button
+                        type="button"
+                        class="btn btn-link form__add-btn"
+                        v-on:click="addPhrase"
+                        v-bind:disabled="searching"
+                        v-show="showAddPhraseBtn">
+                        Add Another Phrase
+                    </button>
+                    <button type="button" class="btn btn-lg form__search-btn" v-on:click="search" v-bind:disabled="searching">
                         {{ searching ? 'Searching...' : 'Search'}}
                     </button>
                 </form>
-                <div class="mt-2" v-show="showResults">
-                    <h5 class="my-4" v-show="!results">Zero, zilch, zip, nada, nothing!</h5>
-                    <div v-show="results">
-                        <div v-for="(phrase, i) in results.phrases">
+                <div class="results" v-show="showResults">
+                    <div class="results__header">
+                        <h5 v-show="!results">Zero, zilch, zip, nada, nothing!</h5>
+                        <div v-show="results" v-for="(phrase, i) in results.phrases">
                             <span v-bind:style="{ color: chartColors[i] }">{{ phrase.percent }}%</span> <span class="text-secondary">say</span> <strong v-bind:style="{ color: chartColors[i] }">{{ phrase.text }}</strong>
                         </div>
                     </div>
-                    <div class="chart-container mx-auto my-3" v-show="results">
+                    <div class="results__chart mx-auto" v-show="results">
                         <canvas ref="chart_canvas"></canvas>
                     </div>
-                    <button type="button" class="btn btn-link try-again-btn" v-on:click="hideResults">Try Again!</button>
+                    <button type="button" class="results__try-again-btn btn btn-link" v-on:click="hideResults">Try Again!</button>
                 </div>
             </div>
         </main>
-        <footer class="text-center">
+        <footer class="footer">
             <small>Created by <a href="http://www.slicvic.com">slicvic.com</a></small>
         </footer>
     </div>

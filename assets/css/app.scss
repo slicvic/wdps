@@ -11,30 +11,11 @@ $colors: (
     placeholder-invalid: #ee9aa2
 );
 
-body {
-    font-family: 'Baloo', cursive;
-    color: map-get($colors, 'tertiary');
-}
-
 a,
 a:active,
 a:visited {
     color: map-get($colors, 'link');
     text-decoration: underline;
-}
-
-.logo,
-.logo strong {
-    color: map-get($colors, 'primary');
-    font-size: 3rem;
-}
-
-.logo strong {
-    font-size: 4rem;
-}
-
-.desc {
-    margin: 0;
 }
 
 .text-primary {
@@ -45,18 +26,41 @@ a:visited {
     color: map-get($colors, 'secondary') !important;
 }
 
-.search-btn {
-    background-color: map-get($colors, 'secondary');
-    color: #fff;
+.app {
+    font-family: 'Baloo', cursive;
+    color: map-get($colors, 'tertiary');
+    text-align: center;
+    margin-top: 1rem;
 }
 
-.search-btn:hover {
-    background-color: map-get($colors, 'secondary-light');
+.footer {
+    margin-top: 3rem;
+    padding: 1rem 0;
+    border-top: 1px solid #eee;
 }
 
-.phrase-input,
-.phrase-input:focus,
-.phrase-input:disabled {
+.logo,
+.logo strong {
+    color: map-get($colors, 'primary');
+    font-size: 3rem;
+    margin: 0;
+}
+
+.logo strong {
+    font-size: 4rem;
+}
+
+.subhead {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+}
+.subhead__text {
+    margin: 0;
+}
+
+.form__input,
+.form__input:focus,
+.form__input:disabled {
     background-color: #faedca;
     border: 2px solid #f2c078;
     color: map-get($colors, 'tertiary');
@@ -64,39 +68,66 @@ a:visited {
     text-align: center;
 }
 
-.phrase-input.is-invalid {
+.form__input.is-invalid {
     background-color: #fdf1f2;
 }
 
-.phrase-input::placeholder {
+.form__input::placeholder {
     color: map-get($colors, 'placeholder');
     -webkit-text-fill-color: map-get($colors, 'placeholder');
 }
 
-.phrase-input.phrase-input.is-invalid::placeholder {
+.form__input.is-invalid::placeholder {
     color: map-get($colors, 'placeholder-invalid');
     -webkit-text-fill-color: map-get($colors, 'placeholder-invalid');
 }
 
-.add-phrase-btn {
-    font-size: 1.1rem;
+.form__vs {
+    margin: .5rem 0;
 }
 
-.try-again-btn {
+.form__add-btn {
+    display: block;
+    margin: 0 auto;
+    font-size: 1.1rem;
+    margin-top: 1rem;
+}
+
+.form__add-btn,
+.form__add-btn:disabled,
+.form__remove-btn i {
+    color: map-get($colors, 'primary');
+}
+
+.form__search-btn {
+    display: block;
+    margin: 0 auto;
+    background-color: map-get($colors, 'secondary');
+    color: #fff;
+    margin-top: 1rem;
+}
+
+.form__search-btn:hover {
+    background-color: map-get($colors, 'secondary-light');
+}
+
+.results__try-again-btn {
     font-size: 2rem;
     color: map-get($colors, 'secondary');
 }
 
-.add-phrase-btn,
-.add-phrase-btn:disabled,
-.remove-phrase-btn i {
-    color: map-get($colors, 'primary');
+.form__add-btn:hover,
+.form__remove-btn:hover i,
+.results__try-again-btn:hover {
+    color: map-get($colors, 'tertiary-dark');
 }
 
-.add-phrase-btn:hover,
-.remove-phrase-btn:hover i,
-.try-again-btn:hover {
-    color: map-get($colors, 'tertiary-dark');
+.results__header {
+    margin-top: 1rem;
+}
+
+.results__chart {
+    margin: 1rem 0;
 }
 
 /* Extra small devices (portrait phones, less than 576px) */
@@ -109,7 +140,7 @@ a:visited {
         font-size: 2.5rem;
     }
 
-    .desc {
+    .subhead__text {
         font-size: .8rem;
     }
 }
