@@ -1,5 +1,6 @@
 <?php
 header('Content-Type: application/json');
+require_once(__DIR__ . '/lib/SearchService.php');
 
 $input = !empty($_GET) ? $_GET : null;
 
@@ -10,21 +11,6 @@ if (!$validInput) {
     exit;
 }
 
-function googleSearch($q) {
-    $url = 'https://www.google.com/search?q=' . urlencode($q);
-    $ch = curl_init(); 
-    curl_setopt($ch, CURLOPT_URL, $url); 
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
-    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.2; WOW64; rv:17.0) Gecko/20100101 Firefox/17.0');
-    $response = curl_exec($ch);
-    curl_close($ch); 
-    preg_match('/About ([0-9,]+) results/', $response, $matches, PREG_OFFSET_CAPTURE);
-    if (!empty($matches[1][0])) {
-        return preg_replace('/[^0-9]/', '', $matches[1][0]);
-    }
-    return 0;
-}
-
 $response = [
     'total' => 0,
     'totalFormatted' => 0,
@@ -32,9 +18,10 @@ $response = [
 ];
 
 // Perform searches and tally totals
+$searchSvc = new SearchService();
 foreach ($input['phrases'] as $phrase) {
-    $twitterTotal = googleSearch('site:twitter.com "' . $phrase . '" ');
-    $redditTotal = googleSearch('site:reddit.com "' . $phrase . '"');
+    $twitterTotal = $searchSvc->search($phrase, 'twitter.com');
+    $redditTotal = $searchSvc->search($phrase, 'reddit.com');
     $total = $twitterTotal + $redditTotal;
     $response['total'] += $total;
     $response['phrases'][] = [
@@ -45,7 +32,7 @@ foreach ($input['phrases'] as $phrase) {
 
 // Exit early if no results
 if (empty($response['total'])) {
-    exit(json_encode($response));
+    exit(json_encode(['no_results' => true]));
 }
 
 // Format total
@@ -63,5 +50,11 @@ usort($response['phrases'], function($a, $b) {
     }
     return ($a['total'] > $b['total']) ? -1 : 1;
 });
+
+// Unset deprecated data
+unset($response['total'], $response['totalFormatted']);
+foreach ($response['phrases'] as &$phrase) {
+    unset($phrase['total']);
+}
 
 exit(json_encode($response));
