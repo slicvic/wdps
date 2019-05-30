@@ -9,7 +9,7 @@
             maxPhrases: 3,
             minPhrases: 2,
             phrases: ['', ''],
-            placeholders: ['Enter a phrase', 'Enter a phrase', 'Enter a phrase'],
+            placeholders: ['e.g. jordan goat', 'e.g. lebron goat', 'e.g. kobe goat'],
             chart: null,
             chartColors: ['#ff9ff3', '#feca57', '#1dd1a1'],
             results: {}
