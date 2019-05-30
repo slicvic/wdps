@@ -13,7 +13,7 @@ class SearchService {
     /**
      * @param string $searchEngine
      */
-    public function __construct(string $searchEngine = null)
+    public function __construct($searchEngine = '')
     {
         $this->setSearchEngine($searchEngine ?: self::SEARCH_ENGINE_BING);
     }
@@ -23,7 +23,7 @@ class SearchService {
      * @param string site e.g. twitter.com
      * @return int
      */
-    public function search(string $phrase, string $site = null)
+    public function search($phrase, $site = '')
     {
         $q = sprintf('"%s"', $phrase);
         if ($site) {
@@ -37,7 +37,7 @@ class SearchService {
      * @param string $searchEngine
      * @return $this
      */
-    protected function setSearchEngine(string $searchEngine)
+    protected function setSearchEngine($searchEngine)
     {
         if (!in_array($searchEngine, [
             self::SEARCH_ENGINE_GOOGLE,
@@ -53,7 +53,7 @@ class SearchService {
      * @param string $q
      * @return int
      */
-    protected function doRequestGoogle(string $q)
+    protected function doRequestGoogle($q)
     {
         $response = $this->doRequest('https://www.google.com/search?q=' . urlencode($q));
         preg_match('/<div id="resultStats">About ([0-9,]+) results/', $response, $matches, PREG_OFFSET_CAPTURE);
@@ -67,7 +67,7 @@ class SearchService {
      * @param string $q
      * @return int
      */
-    protected function doRequestBing(string $q)
+    protected function doRequestBing($q)
     {
         $response = $this->doRequest('https://www.bing.com/search?q=' . urlencode($q));
         preg_match('/<span class="sb_count">([0-9,]+) results/', $response, $matches, PREG_OFFSET_CAPTURE);
@@ -81,7 +81,7 @@ class SearchService {
      * @param string $url
      * @return string
      */
-    protected function doRequest(string $url)
+    protected function doRequest($url)
     {
         $ch = curl_init(); 
         curl_setopt($ch, CURLOPT_URL, $url); 
