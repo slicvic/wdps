@@ -69,7 +69,7 @@
                     <h4 class="mb-3" v-show="!results">Nothing!</h4>
                     <div class="mt-4" v-show="results">
                         <div v-for="(phrase, i) in results.phrases">
-                            <span class="text-secondary">{{ phrase.percent }}%</span> say <strong class="text-secondary">{{ phrase.text }}</strong>
+                            <span v-bind:style="{ color: chartColors[i] }">{{ phrase.percent }}%</span> say <strong v-bind:style="{ color: chartColors[i] }">{{ phrase.text }}</strong>
                         </div>
                     </div>
                     <div class="chart-container mx-auto my-4" v-show="results">
