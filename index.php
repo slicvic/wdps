@@ -77,8 +77,8 @@
                 <div class="results" v-show="showResults">
                     <div class="results__header">
                         <h5 v-show="!results">Zero, zilch, zip, nada, nothing!</h5>
-                        <div v-show="results" v-for="(phrase, i) in results.phrases">
-                            <span v-bind:style="{ color: chartColors[i] }">{{ phrase.percent }}%</span> <span class="text-secondary">say</span> <strong v-bind:style="{ color: chartColors[i] }">{{ phrase.text }}</strong>
+                        <div v-show="results" v-for="(r, i) in results">
+                            <span v-bind:style="{ color: chartColors[i] }">{{ r.percent }}%</span> <span class="text-secondary">say</span> <strong v-bind:style="{ color: chartColors[i] }">{{ r.phrase }}</strong>
                         </div>
                     </div>
                     <div class="results__chart mx-auto" v-show="results">

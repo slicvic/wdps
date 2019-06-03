@@ -88,28 +88,28 @@
                 });
 
                 $.getJSON('/search.php', params.join('&')).done(function(response) {
-                    if (response.no_results) {
+                    if (typeof response.results !== 'object') {
                         that.results = false;
                         that.searching = false;
                         that.showResults = true;
                         return;
                     }
 
-                    that.results = response;
+                    that.results = response.results;
 
                     // Prepare chart data
                     var chartData = [];
                     var chartLabels = [];
-                    that.results.phrases.forEach(function(phrase) {
-                        chartLabels.push(phrase.text);
-                        chartData.push(phrase.percent);
+                    that.results.forEach(function(r) {
+                        chartLabels.push(r.phrase);
+                        chartData.push(r.percent);
                     });
 
                     // Clear canvas
                     var canvas = $(that.$refs.chart_canvas)[0];
                     canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
         
-                    // Destroy previous chart
+                    // Destroy old chart
                     if (that.chart) {
                         that.chart.destroy();
                     }

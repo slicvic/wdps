@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: application/json');
 require_once(__DIR__ . '/lib/SearchService.php');
+define('SEARCH_ENGINE', 'bing');
 
 $input = !empty($_GET) ? $_GET : null;
 
@@ -11,50 +12,43 @@ if (!$validInput) {
     exit;
 }
 
-$response = [
-    'total' => 0,
-    'totalFormatted' => 0,
-    'phrases' => []
-];
+$totalHits = 0;
+$totalHitsByPhrase = [];
 
 // Perform searches and tally totals
-$searchSvc = new SearchService();
+$searchSvc = new SearchService(SEARCH_ENGINE);
 foreach ($input['phrases'] as $phrase) {
     $twitterTotal = $searchSvc->search($phrase, 'twitter.com');
     $redditTotal = $searchSvc->search($phrase, 'reddit.com');
     $total = $twitterTotal + $redditTotal;
-    $response['total'] += $total;
-    $response['phrases'][] = [
-        'text' => $phrase,
+    $totalHits += $total;
+    $totalHitsByPhrase[] = [
+        'phrase' => $phrase,
         'total' => $total
     ];
 }
 
 // Exit early if no results
-if (empty($response['total'])) {
-    exit(json_encode(['no_results' => true]));
+if ($totalHits < 1) {
+    exit(json_encode(['results' => false]));
 }
 
-// Format total
-$response['totalFormatted'] = number_format($response['total']);
-
-// Calculate percents
-foreach ($response['phrases'] as &$phrase) {
-    $phrase['percent'] = round(($phrase['total'] / $response['total']) * 100, 2);
-}
-
-// Sort results
-usort($response['phrases'], function($a, $b) {
+// Sort totals desc
+usort($totalHitsByPhrase, function($a, $b) {
     if ($a['total'] === $b['total']) {
         return 0;
     }
     return ($a['total'] > $b['total']) ? -1 : 1;
 });
 
-// Unset deprecated data
-unset($response['total'], $response['totalFormatted']);
-foreach ($response['phrases'] as &$phrase) {
-    unset($phrase['total']);
+$response = [];
+
+// Calculate percents
+foreach ($totalHitsByPhrase as $t) {
+    $response[] = [
+        'phrase' => $t['phrase'],
+        'percent' => round(($t['total'] / $totalHits) * 100, 2)
+    ];
 }
 
-exit(json_encode($response));
+exit(json_encode(['results' => $response]));
