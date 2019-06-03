@@ -1,7 +1,15 @@
-<?php
+<?php 
+
 header('Content-Type: application/json');
+
 require_once(__DIR__ . '/lib/SearchService.php');
+
 define('SEARCH_ENGINE', 'bing');
+
+define('DB_HOST', '');
+define('DB_NAME', '');
+define('DB_USER', '');
+define('DB_PASS', '');
 
 $input = !empty($_GET) ? $_GET : null;
 
@@ -51,4 +59,14 @@ foreach ($totalHitsByPhrase as $t) {
     ];
 }
 
-exit(json_encode(['results' => $response]));
+try {
+    $pdo = new PDO('mysql:host=' .DB_HOST . ';dbname=' . DB_NAME, DB_USER, DB_PASS);
+    $pdo->prepare('INSERT INTO searches SET q = :q, ip = :ip, dt = :dt')
+        ->execute([
+            'q'  => json_encode($input['phrases']),
+            'ip' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '',
+            'dt' => date('Y-m-d H:i:s')
+        ]);
+} catch (Exception $e) {}
+
+exit(json_encode(['results' => $response, 'x' => $_SERVER]));
