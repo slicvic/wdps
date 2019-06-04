@@ -25,11 +25,11 @@ class Search {
      */
     public function search($phrase, $site = '')
     {
-        $q = sprintf('"%s"', $phrase);
-        if ($site) {
-            $q = "site:$site " . $q;
+        $q = '"' . $phrase . '"';
+        if (!empty($site)) {
+            $q = "site:$site $q";
         }
-        $method = 'doRequest' . ucfirst($this->searchEngine);
+        $method = 'search' . ucfirst($this->searchEngine);
         return $this->$method($q);
     }
 
@@ -37,7 +37,7 @@ class Search {
      * @param string $searchEngine
      * @return $this
      */
-    protected function setSearchEngine($searchEngine)
+    public function setSearchEngine($searchEngine)
     {
         if (!in_array($searchEngine, [
             self::SEARCH_ENGINE_GOOGLE,
@@ -53,9 +53,9 @@ class Search {
      * @param string $q
      * @return int
      */
-    protected function doRequestGoogle($q)
+    protected function searchGoogle($q)
     {
-        $response = $this->doRequest('https://www.google.com/search?q=' . urlencode($q));
+        $response = $this->curl('https://www.google.com/search?q=' . urlencode($q));
         preg_match('/<div id="resultStats">About ([0-9,]+) results/', $response, $matches, PREG_OFFSET_CAPTURE);
         if (!empty($matches[1][0])) {
             return preg_replace('/[^0-9]/', '', $matches[1][0]);
@@ -67,9 +67,9 @@ class Search {
      * @param string $q
      * @return int
      */
-    protected function doRequestBing($q)
+    protected function searchBing($q)
     {
-        $response = $this->doRequest('https://www.bing.com/search?q=' . urlencode($q));
+        $response = $this->curl('https://www.bing.com/search?q=' . urlencode($q));
         preg_match('/<span class="sb_count">([0-9,]+) results/', $response, $matches, PREG_OFFSET_CAPTURE);
         if (!empty($matches[1][0])) {
             return preg_replace('/[^0-9]/', '', $matches[1][0]);
@@ -81,7 +81,7 @@ class Search {
      * @param string $url
      * @return string
      */
-    protected function doRequest($url)
+    protected function curl($url)
     {
         $ch = curl_init(); 
         curl_setopt($ch, CURLOPT_URL, $url); 
