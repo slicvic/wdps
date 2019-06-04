@@ -15,8 +15,9 @@ if (isset($_GET['q']) && is_string($_GET['q'])) {
 
 $site['app_name'] = 'What do people say';
 $site['desc'] = 'Search multiple phrases and see what do people say the most';
-$site['meta_desc'] = !empty($phrases) ? 'What do people say: ' . implode(' or ', $phrases) : $site['desc'];
-$site['title'] = !empty($phrases) ? 'What do people say: "' . implode('" or "', $phrases) . '"' : $site['app_name'] . ' ' . $site['meta_desc'];
+$site['title'] = !empty($phrases) ? $site['app_name'] . ': "' . implode('" or "', $phrases) . '"' : $site['app_name'] . ' - ' . $site['desc'];
+$site['meta_desc'] = !empty($phrases) ? $site['app_name'] . ': ' . implode(' or ', $phrases) : $site['desc'];
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
