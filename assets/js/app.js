@@ -1,4 +1,4 @@
-(function(Vue, $, Chart, phrases) {
+(function(Vue, $, Chart, q) {
 
     new Vue({
         el: '.js-app',
@@ -13,7 +13,8 @@
             examples: ['Jordan GOAT', 'LeBron GOAT', 'Kobe GOAT'],
             chart: null,
             chartColors: ['#5d5d5a', '#ffcdab', '#d2c8c8'],
-            results: {}
+            results: {},
+            shareUrl: ''
         },
         computed: {
             showAddPhraseBtn: function() {
@@ -21,9 +22,6 @@
             },
             showRemovePhraseBtn: function() {
                 return this.phrases.length > this.minPhrases;
-            },
-            shareUrl: function() {
-                return 'whatdopeoplesay.com?phrases=' + encodeURIComponent(this.phrases.join(','));
             }
         },
         mounted: function() {
@@ -42,8 +40,8 @@
             });
 
             // Auto search
-            if (phrases.length >= 2 && phrases.length <= 3) {
-                this.phrases = phrases;
+            if (q.length >= 2 && q.length <= 3) {
+                this.phrases = q;
                 this.search();
             }
         },
@@ -118,6 +116,7 @@
                     }
 
                     that.results = response.results;
+                    that.shareUrl = response.share_url;
 
                     // Prepare chart data
                     var chartData = [];
@@ -164,4 +163,4 @@
         }
     });
     
-})(window.Vue, window.jQuery, window.Chart, window.phrases);
+})(window.Vue, window.jQuery, window.Chart, window.q);

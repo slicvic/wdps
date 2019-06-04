@@ -104,14 +104,14 @@
         </footer>
     </div>
     <script>
-        var phrases = [];
+        var q = [];
         <?php 
-            if (isset($_GET['phrases']) && is_string($_GET['phrases'])) {
-                $phrases = explode(',', $_GET['phrases']);
+            if (isset($_GET['q']) && is_string($_GET['q'])) {
+                $phrases = explode(',', $_GET['q']);
                 if (is_array($phrases) && count($phrases) >= 2 && count($phrases) <= 3) {
                     foreach ($phrases as $p) {
                         if (is_string($p)) {
-                            echo "phrases.push('" . htmlspecialchars(trim($p)) . "');";
+                            echo "q.push('" . htmlspecialchars(trim($p)) . "');";
                         }
                     }
                 }

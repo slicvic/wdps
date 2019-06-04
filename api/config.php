@@ -2,6 +2,8 @@
 
 $config = [];
 
+$config['base_url'] = 'http://whatdopeoplesay.com';
+
 $config['search_engine'] = 'bing';
 $config['phrase_max_length'] = 100;
 $config['min_phrases'] = 2;

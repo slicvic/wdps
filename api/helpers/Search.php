@@ -85,10 +85,10 @@ class Search {
     {
         $ch = curl_init(); 
         curl_setopt($ch, CURLOPT_URL, $url); 
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
         curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.2; WOW64; rv:17.0) Gecko/20100101 Firefox/17.0');
-        $response = curl_exec($ch);
+        $data = curl_exec($ch);
         curl_close($ch); 
-        return $response;
+        return $data;
     }
 }
