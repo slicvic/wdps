@@ -6,20 +6,23 @@ require_once(__DIR__ . '/config.php');
 require_once(__DIR__ . '/helpers/Db.php');
 require_once(__DIR__ . '/helpers/Search.php');
 
-$input = !empty($_GET) ? $_GET : null;
+$input = isset($_GET) ? $_GET : null;
 
-// Exit early if input is invalid
-$validInput = !empty($input['q']) && is_array($input['q']) && count($input['q']) > 1;
+// Exit early if input is not valid
+$validInput = isset($input['q']) && is_array($input['q']) && count($input['q']) >= $config['min_phrases'];
 if (!$validInput) {
     http_response_code(400);
     exit;
 }
 
-$totalHits = 0;
-$totalHitsByPhrase = [];
+// Limit phrases
+$input['q'] = array_slice($input['q'], 0, $config['max_phrases']);
 
 // Perform searches and tally totals
+$totalHits = 0;
+$totalHitsByPhrase = [];
 $searchSvc = new Search($config['search_engine']);
+
 foreach ($input['q'] as &$phrase) {
     $phrase = substr($phrase, 0, $config['phrase_max_length'] );
     $twitterTotal = $searchSvc->search($phrase, 'twitter.com');
