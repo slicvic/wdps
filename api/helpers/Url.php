@@ -26,7 +26,7 @@ class Url {
         foreach ($phrases as $p) {
             $encPhrases[] = urlencode($p);
         }
-        return $base_url . '?q='. implode('_', $encPhrases);
+        return $base_url . '?q='. implode(',', $encPhrases);
     }
 
     /**
@@ -38,7 +38,7 @@ class Url {
         $phrases = [];
         parse_str(parse_url($url, PHP_URL_QUERY), $params);
         if (isset($params['q']) && is_string($params['q'])) {
-            $q = explode('_', $params['q']);
+            $q = explode(',', $params['q']);
             if (is_array($q) && count($q) >= 2 && count($q) <= 3) {
                 foreach ($q as $p) {
                     if (is_string($p)) {
