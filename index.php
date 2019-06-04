@@ -1,5 +1,5 @@
 <?php
-$cb = 16;
+$cb = 17;
 $phrases = [];
 
 if (isset($_GET['q']) && is_string($_GET['q'])) {
@@ -14,7 +14,9 @@ if (isset($_GET['q']) && is_string($_GET['q'])) {
 }
 
 $site['app_name'] = 'What do people say';
-$site['title'] = $site['meta_desc'] = !empty($phrases) ? implode(' vs. ', $phrases) : 'Search multiple phrases and see what do people say the most';
+$site['desc'] = 'Search multiple phrases and see what do people say the most';
+$site['meta_desc'] = !empty($phrases) ? 'What do people say: ' . implode(' or ', $phrases) : $site['desc'];
+$site['title'] = !empty($phrases) ? 'What do people say: "' . implode('" or "', $phrases) . '"' : $site['app_name'] . ' ' . $site['meta_desc'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,10 +31,9 @@ $site['title'] = $site['meta_desc'] = !empty($phrases) ? implode(' vs. ', $phras
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-name" content="<?= $site['app_name'] ?>">
     <meta name="description" content="<?= $site['meta_desc'] ?>">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title><?= $site['app_name'] ?> - <?= $site['title'] ?></title>
+    <title><?= $site['title'] ?></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
