@@ -29,8 +29,8 @@ class Search {
         if (!empty($site)) {
             $q = "site:$site $q";
         }
-        $method = 'search' . ucfirst($this->searchEngine);
-        return $this->$method($q);
+        $methodName = 'search' . ucfirst($this->searchEngine);
+        return $this->$methodName($q);
     }
 
     /**
