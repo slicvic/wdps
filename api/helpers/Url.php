@@ -22,19 +22,23 @@ class Url {
      */
     public function createShareUrl($base_url, array $phrases)
     {  
-        return $base_url . '?q='. urlencode(implode('|', $phrases));
+        $encPhrases = [];
+        foreach ($phrases as $p) {
+            $encPhrases[] = urlencode($p);
+        }
+        return $base_url . '?q='. implode('_', $encPhrases);
     }
 
     /**
      * @param string $url
      * @return array List of phrases
      */
-    public function decodeShareUrl($url)
+    public function decodeShareUrlPhrases($url)
     {
         $phrases = [];
-        parse_str(parse_url($url, PHP_URL_QUERY), $queryParams);
-        if (isset($queryParams['q']) && is_string($queryParams['q'])) {
-            $q = explode('|', $queryParams['q']);
+        parse_str(parse_url($url, PHP_URL_QUERY), $params);
+        if (isset($params['q']) && is_string($params['q'])) {
+            $q = explode('_', $params['q']);
             if (is_array($q) && count($q) >= 2 && count($q) <= 3) {
                 foreach ($q as $p) {
                     if (is_string($p)) {

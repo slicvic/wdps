@@ -2,7 +2,7 @@
 require_once(__DIR__ . '/config.php');
 require_once(__DIR__ . '/api/helpers/Url.php');
 $urlHelper = new Url();
-$shareUrlPhrases = $urlHelper->decodeShareUrl(isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '');
+$shareUrlPhrases = !empty($_SERVER['REQUEST_URI']) ? $urlHelper->decodeShareUrlPhrases($_SERVER['REQUEST_URI']) : [];
 $title = !empty($shareUrlPhrases) ? $config['site']['name'] . ': "' . implode('" or "', $shareUrlPhrases) . '"' : $config['site']['name'] . '? ' . $config['site']['desc'];
 $meta_desc = !empty($shareUrlPhrases) ? '' : $config['site']['desc'];
 ?>
