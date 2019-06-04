@@ -1,6 +1,6 @@
 <?php
 
-class SearchService {
+class Search {
 
     const SEARCH_ENGINE_GOOGLE = 'google';
     const SEARCH_ENGINE_BING = 'bing';

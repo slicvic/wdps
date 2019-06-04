@@ -2,14 +2,9 @@
 
 header('Content-Type: application/json');
 
-require_once(__DIR__ . '/lib/SearchService.php');
-
-define('SEARCH_ENGINE', 'bing');
-
-define('DB_HOST', '');
-define('DB_NAME', '');
-define('DB_USER', '');
-define('DB_PASS', '');
+require_once(__DIR__ . '/config.php');
+require_once(__DIR__ . '/helpers/Db.php');
+require_once(__DIR__ . '/helpers/Search.php');
 
 $input = !empty($_GET) ? $_GET : null;
 
@@ -24,8 +19,9 @@ $totalHits = 0;
 $totalHitsByPhrase = [];
 
 // Perform searches and tally totals
-$searchSvc = new SearchService(SEARCH_ENGINE);
-foreach ($input['phrases'] as $phrase) {
+$searchSvc = new Search($config['search_engine']);
+foreach ($input['phrases'] as &$phrase) {
+    $phrase = substr($phrase, 0, $config['phrase_max_length'] );
     $twitterTotal = $searchSvc->search($phrase, 'twitter.com');
     $redditTotal = $searchSvc->search($phrase, 'reddit.com');
     $total = $twitterTotal + $redditTotal;
@@ -35,6 +31,15 @@ foreach ($input['phrases'] as $phrase) {
         'total' => $total
     ];
 }
+
+// Log search
+try {
+    $db = new Db($config['db']['host'], $config['db']['name'], $config['db']['user'], $config['db']['pass']);
+    $db->logSearch(
+        json_encode($input['phrases']), 
+        isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : ''
+    );
+} catch (Exception $e) {}
 
 // Exit early if no results
 if ($totalHits < 1) {
@@ -59,14 +64,4 @@ foreach ($totalHitsByPhrase as $t) {
     ];
 }
 
-try {
-    $pdo = new PDO('mysql:host=' .DB_HOST . ';dbname=' . DB_NAME, DB_USER, DB_PASS);
-    $pdo->prepare('INSERT INTO searches SET q = :q, ip = :ip, dt = :dt')
-        ->execute([
-            'q'  => json_encode($input['phrases']),
-            'ip' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '',
-            'dt' => date('Y-m-d H:i:s')
-        ]);
-} catch (Exception $e) {}
-
-exit(json_encode(['results' => $response, 'x' => $_SERVER]));
+exit(json_encode(['results' => $response]));

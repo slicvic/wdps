@@ -87,7 +87,7 @@
                     params.push('phrases[]=' + phrase);
                 });
 
-                $.getJSON('/search.php', params.join('&')).done(function(response) {
+                $.getJSON('/api/search.php', params.join('&')).done(function(response) {
                     if (typeof response.results !== 'object') {
                         that.results = false;
                         that.searching = false;
