@@ -1,5 +1,5 @@
 <?php
-    $cb = 11;
+    $cb = 12;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,8 +30,11 @@
                 <strong>W</strong>hat <strong>D</strong>o <strong>P</strong>eople <strong>S</strong>ay<strong>?</strong>
             </h1>
             <div class="subhead" v-show="!showResults">
-                <h2 class="subhead__text">Type in some phrases to see what people say the most.</h2>
-                <h2 class="subhead__text">For example, <strong class="text-secondary">{{ examples[0] }}</strong> vs. <strong class="text-secondary">{{ examples[1] }}</strong></h2>
+                <h2 class="subhead__text">
+                    Type in some phrases to see what people say the most.
+                    <br class="d-none d-sm-block"> 
+                    For example, <strong class="text-secondary">{{ examples[0] }}</strong> vs. <strong class="text-secondary">{{ examples[1] }}</strong>
+                </h2>
             </div>
         </header>
         <main class="row">
