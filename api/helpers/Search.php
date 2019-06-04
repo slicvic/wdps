@@ -29,7 +29,7 @@ class Search {
         if (!empty($site)) {
             $q = "site:$site $q";
         }
-        $methodName = 'search' . ucfirst($this->searchEngine);
+        $methodName = 'get' . ucfirst($this->searchEngine) . 'ResultCount';
         return $this->$methodName($q);
     }
 
@@ -53,7 +53,7 @@ class Search {
      * @param string $q
      * @return int
      */
-    protected function searchGoogle($q)
+    protected function getGoogleResultCount($q)
     {
         $response = $this->curl('https://www.google.com/search?q=' . urlencode($q));
         preg_match('/<div id="resultStats">About ([0-9,]+) results/', $response, $matches, PREG_OFFSET_CAPTURE);
@@ -67,7 +67,7 @@ class Search {
      * @param string $q
      * @return int
      */
-    protected function searchBing($q)
+    protected function getBingResultCount($q)
     {
         $response = $this->curl('https://www.bing.com/search?q=' . urlencode($q));
         preg_match('/<span class="sb_count">([0-9,]+) results/', $response, $matches, PREG_OFFSET_CAPTURE);

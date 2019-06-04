@@ -19,8 +19,8 @@ if (!$validInput) {
 $input['q'] = array_slice($input['q'], 0, $config['max_phrases']);
 
 // Perform searches and tally totals
-$totalHits = 0;
-$totalHitsByPhrase = [];
+$totalResults = 0;
+$totalResultsByPhrase = [];
 $searchSvc = new Search($config['search_engine']);
 
 foreach ($input['q'] as &$phrase) {
@@ -28,8 +28,8 @@ foreach ($input['q'] as &$phrase) {
     $twitterTotal = $searchSvc->search($phrase, 'twitter.com');
     $redditTotal = $searchSvc->search($phrase, 'reddit.com');
     $total = $twitterTotal + $redditTotal;
-    $totalHits += $total;
-    $totalHitsByPhrase[] = [
+    $totalResults += $total;
+    $totalResultsByPhrase[] = [
         'phrase' => $phrase,
         'total' => $total
     ];
@@ -45,12 +45,12 @@ try {
 } catch (Exception $e) {}
 
 // Exit early if no results
-if ($totalHits < 1) {
+if ($totalResults < 1) {
     exit(json_encode(['results' => false]));
 }
 
 // Sort totals desc
-usort($totalHitsByPhrase, function($a, $b) {
+usort($totalResultsByPhrase, function($a, $b) {
     if ($a['total'] === $b['total']) {
         return 0;
     }
@@ -60,10 +60,10 @@ usort($totalHitsByPhrase, function($a, $b) {
 $response = [];
 
 // Calculate percents
-foreach ($totalHitsByPhrase as $t) {
+foreach ($totalResultsByPhrase as $t) {
     $response[] = [
         'phrase' => $t['phrase'],
-        'percent' => round(($t['total'] / $totalHits) * 100, 2)
+        'percent' => round(($t['total'] / $totalResults) * 100, 2)
     ];
 }
 
