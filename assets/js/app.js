@@ -23,7 +23,7 @@
                 return this.phrases.length > this.minPhrases;
             },
             shareUrl: function() {
-                return 'whatdopeoplesay.com?phrases=' + this.phrases.join(',');
+                return 'whatdopeoplesay.com?phrases=' + encodeURIComponent(this.phrases.join(','));
             }
         },
         mounted: function() {
