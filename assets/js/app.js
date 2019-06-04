@@ -1,4 +1,4 @@
-(function(Vue, $, Chart, q) {
+(function(Vue, $, Chart, phrases) {
 
     new Vue({
         el: '.js-app',
@@ -21,20 +21,29 @@
             },
             showRemovePhraseBtn: function() {
                 return this.phrases.length > this.minPhrases;
+            },
+            shareUrl: function() {
+                return 'whatdopeoplesay.com?phrases=' + this.phrases.join(',');
             }
         },
         mounted: function() {
+            var that = this;
+
             $(this.$el).removeClass('d-none');
             
+            $(this.$refs.shareUrlInput).focus(function() {
+                $(this).select();
+            });
+
             $(this.$el).on('keypress', '.js-phrase-input', function(e) {
                 if (e.which === 13) {
-                    this.search();
+                    that.search();
                 }
-            }.bind(this));
+            });
 
             // Auto search
-            if (q.length >= 2 && q.length <= 3) {
-                this.phrases = q;
+            if (phrases.length >= 2 && phrases.length <= 3) {
+                this.phrases = phrases;
                 this.search();
             }
         },
@@ -49,6 +58,10 @@
             },
             hideResults: function() {
                 this.showResults = false;
+            },
+            copyShareUrl: function() {
+                $(this.$refs.shareUrlInput).select();
+                document.execCommand('copy');
             },
             handlePhraseInputKeyup: function(index) {
                 this.validatePhrases(index);
@@ -88,8 +101,10 @@
 
                 this.showResults = false;
                 this.searching = true;
+
                 var that = this;
                 var params = [];
+
                 this.phrases.forEach(function(phrase) {
                     params.push('q[]=' + phrase);
                 });
@@ -113,7 +128,7 @@
                     });
 
                     // Clear old chart
-                    var canvas = $(that.$refs.chart_canvas)[0];
+                    var canvas = $(that.$refs.chartCanvas)[0];
                     canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
                     if (that.chart) {
                         that.chart.destroy();
@@ -149,4 +164,4 @@
         }
     });
     
-})(window.Vue, window.jQuery, window.Chart, window.q);
+})(window.Vue, window.jQuery, window.Chart, window.phrases);

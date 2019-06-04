@@ -132,6 +132,17 @@ a:visited {
 .results__chart {
     margin: 1rem 0;
     max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.results__share {
+    max-width: 300px;
+    margin: 1.5rem auto 1rem auto;
+}
+
+.results__share input {
+    background-color: #f6f6f6 !important;
 }
 
 /* Extra small devices (portrait phones, less than 576px) */

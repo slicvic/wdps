@@ -1,5 +1,5 @@
 <?php
-    $cb = 5;
+    $cb = 11;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -83,8 +83,17 @@
                             <span v-bind:style="{ color: chartColors[i] }">{{ r.percent }}%</span> <span class="text-secondary">say</span> <strong v-bind:style="{ color: chartColors[i] }">{{ r.phrase }}</strong>
                         </div>
                     </div>
-                    <div class="results__chart mx-auto" v-show="results">
-                        <canvas ref="chart_canvas"></canvas>
+                    <div class="results__chart" v-show="results">
+                        <canvas ref="chartCanvas"></canvas>
+                    </div>
+                    <div class="results__share">
+                        Share
+                        <div class="input-group">
+                            <input type="text" class="form-control" readonly ref="shareUrlInput" v-model="shareUrl">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-dark" type="button" v-on:click="copyShareUrl">Copy</button>
+                            </div>
+                        </div>
                     </div>
                     <button type="button" class="results__try-again-btn btn btn-link" v-on:click="hideResults">Try Again!</button>
                 </div>
@@ -95,12 +104,15 @@
         </footer>
     </div>
     <script>
-        var q = [];
+        var phrases = [];
         <?php 
-            if (isset($_GET['q']) && is_array($_GET['q']) && count($_GET['q']) >= 2 && count($_GET['q']) <= 3) {
-                foreach ($_GET['q'] as $q) {
-                    if (is_string($q)) {
-                        echo "q.push('" . htmlspecialchars($q) . "');";
+            if (isset($_GET['phrases']) && is_string($_GET['phrases'])) {
+                $phrases = explode(',', $_GET['phrases']);
+                if (is_array($phrases) && count($phrases) >= 2 && count($phrases) <= 3) {
+                    foreach ($phrases as $p) {
+                        if (is_string($p)) {
+                            echo "phrases.push('" . htmlspecialchars(trim($p)) . "');";
+                        }
                     }
                 }
             }
