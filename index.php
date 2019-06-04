@@ -14,10 +14,9 @@ if (isset($_GET['q']) && is_string($_GET['q'])) {
 }
 
 $site['app_name'] = 'What do people say';
-$site['desc'] = 'Search multiple phrases and see what do people say the most';
-$site['title'] = !empty($phrases) ? $site['app_name'] . ': "' . implode('" or "', $phrases) . '"' : $site['app_name'] . ' - ' . $site['desc'];
-$site['meta_desc'] = !empty($phrases) ? $site['app_name'] . ': ' . implode(' or ', $phrases) : $site['desc'];
-
+$site['app_desc'] = 'Search multiple phrases and see what do people say the most';
+$site['title'] = !empty($phrases) ? $site['app_name'] . ': "' . implode('" or "', $phrases) . '"' : $site['app_name'] . ' - ' . $site['app_desc'];
+$site['meta_desc'] = !empty($phrases) ? '' : $site['app_desc'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -51,7 +50,7 @@ $site['meta_desc'] = !empty($phrases) ? $site['app_name'] . ': ' . implode(' or 
                 <h2 class="subhead__text">
                     Type in some phrases to see what people say the most.
                     <br class="d-none d-sm-block"> 
-                    For example, <strong class="text-secondary">{{ examples[0] }}</strong> vs. <strong class="text-secondary">{{ examples[1] }}</strong>
+                    For example, <strong class="text-secondary">{{ examples[0] }}</strong> or <strong class="text-secondary">{{ examples[1] }}</strong>
                 </h2>
             </div>
         </header>
@@ -59,7 +58,7 @@ $site['meta_desc'] = !empty($phrases) ? $site['app_name'] . ': ' . implode(' or 
             <div class="col-md-6 mx-auto">
                 <form class="form" action="search.php" method="post" v-show="!showResults">
                     <div v-for="(phrase, i) in phrases">
-                        <div class="form__vs" v-show="i > 0">vs.</div>
+                        <div class="form__or" v-show="i > 0">or</div>
                         <div class="d-flex">
                             <div class="flex-grow-1">
                                 <input
@@ -121,7 +120,7 @@ $site['meta_desc'] = !empty($phrases) ? $site['app_name'] . ': ' . implode(' or 
             </div>
         </main>
         <footer class="footer">
-            <small>Created by <a href="http://www.slicvic.com">slicvic.com</a></small>
+            <small>With <i class="fa fa-heart"></i> by <a href="http://www.slicvic.com">slicvic.com</a></small>
         </footer>
     </div>
     <script>
