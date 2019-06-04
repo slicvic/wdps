@@ -21,12 +21,12 @@ $input['q'] = array_slice($input['q'], 0, $config['max_phrases']);
 // Perform searches and tally totals
 $totalResults = 0;
 $totalResultsByPhrase = [];
-$searchSvc = new Search($config['search_engine']);
+$searchHelper = new Search($config['search_engine']);
 
 foreach ($input['q'] as &$phrase) {
     $phrase = substr($phrase, 0, $config['phrase_max_length'] );
-    $twitterTotal = $searchSvc->search($phrase, 'twitter.com');
-    $redditTotal = $searchSvc->search($phrase, 'reddit.com');
+    $twitterTotal = $searchHelper->getResultCount($phrase, 'twitter.com');
+    $redditTotal = $searchHelper->getResultCount($phrase, 'reddit.com');
     $total = $twitterTotal + $redditTotal;
     $totalResults += $total;
     $totalResultsByPhrase[] = [
@@ -37,8 +37,8 @@ foreach ($input['q'] as &$phrase) {
 
 // Log search
 try {
-    $db = new Db($config['db']['host'], $config['db']['name'], $config['db']['user'], $config['db']['pass']);
-    $db->logSearch(
+    $dbHelper = new Db($config['db']['host'], $config['db']['name'], $config['db']['user'], $config['db']['pass']);
+    $dbHelper->logSearch(
         json_encode($input['q']), 
         isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : ''
     );

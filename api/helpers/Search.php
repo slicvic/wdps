@@ -23,7 +23,7 @@ class Search {
      * @param string site e.g. twitter.com
      * @return int
      */
-    public function search($phrase, $site = '')
+    public function getResultCount($phrase, $site = '')
     {
         $q = '"' . $phrase . '"';
         if (!empty($site)) {
