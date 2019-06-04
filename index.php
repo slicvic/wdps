@@ -31,7 +31,7 @@
             </h1>
             <div class="subhead" v-show="!showResults">
                 <h2 class="subhead__text">Type in some phrases to see what people say the most.</h2>
-                <h2 class="subhead__text">For example, <strong class="text-secondary">jordan goat</strong> vs. <strong class="text-secondary">lebron goat</strong></h2>
+                <h2 class="subhead__text">For example, <strong class="text-secondary">{{ examples[0] }}</strong> vs. <strong class="text-secondary">{{ examples[1] }}</strong></h2>
             </div>
         </header>
         <main class="row">
@@ -45,7 +45,7 @@
                                     class="form__input form-control form-control-lg js-phrase-input"
                                     type="text"
                                     maxlength="100"
-                                    v-bind:placeholder="placeholders[i]"
+                                    v-bind:placeholder="'e.g. ' + examples[i]"
                                     v-bind:class="{ 'is-invalid': validationErrors[i] }"
                                     v-bind:disabled="searching"
                                     v-on:keyup="handlePhraseInputKeyup(i)"

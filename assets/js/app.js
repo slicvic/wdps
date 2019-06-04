@@ -10,7 +10,7 @@
             minPhrases: 2,
             //phrases: ['jordan goat', 'kobe goat', 'lebron goat'],
             phrases: ['', ''],
-            placeholders: ['e.g. jordan goat', 'e.g. lebron goat', 'e.g. kobe goat'],
+            examples: ['Jordan GOAT', 'LeBron GOAT', 'Kobe GOAT'],
             chart: null,
             chartColors: ['#5d5d5a', '#ffcdab', '#d2c8c8'],
             results: {}
