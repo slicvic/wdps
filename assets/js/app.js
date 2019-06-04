@@ -1,4 +1,4 @@
-(function(Vue, $, Chart, q) {
+(function(Vue, $, Chart, shareUrlPhrases) {
 
     new Vue({
         el: '.js-app',
@@ -40,8 +40,8 @@
             });
 
             // Auto search
-            if (q.length >= 2 && q.length <= 3) {
-                this.phrases = q;
+            if (shareUrlPhrases.length >= 2 && shareUrlPhrases.length <= 3) {
+                this.phrases = shareUrlPhrases;
                 this.search();
             }
         },
@@ -163,4 +163,4 @@
         }
     });
     
-})(window.Vue, window.jQuery, window.Chart, window.q);
+})(window.Vue, window.jQuery, window.Chart, window.shareUrlPhrases);

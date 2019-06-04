@@ -3,6 +3,10 @@
 $config = [];
 
 $config['base_url'] = 'http://whatdopeoplesay.com';
+$config['cb'] = 20;
+
+$config['site']['name'] = 'What Do People Say';
+$config['site']['desc'] = 'Search multiple phrases and see what do people say the most';
 
 $config['search_engine'] = 'bing';
 $config['phrase_max_length'] = 100;

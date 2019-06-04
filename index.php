@@ -1,22 +1,10 @@
 <?php
-$cb = 17;
-$phrases = [];
-
-if (isset($_GET['q']) && is_string($_GET['q'])) {
-    $q = explode(',', $_GET['q']);
-    if (is_array($q) && count($q) >= 2 && count($q) <= 3) {
-        foreach ($q as $p) {
-            if (is_string($p)) {
-                $phrases[] = htmlspecialchars(trim($p));
-            }
-        }
-    }
-}
-
-$site['app_name'] = 'What Do People Say';
-$site['app_desc'] = 'Search multiple phrases and see what do people say the most';
-$site['title'] = !empty($phrases) ? $site['app_name'] . ': "' . implode('" or "', $phrases) . '"' : $site['app_name'] . '? ' . $site['app_desc'];
-$site['meta_desc'] = !empty($phrases) ? '' : $site['app_desc'];
+require_once(__DIR__ . '/config.php');
+require_once(__DIR__ . '/api/helpers/Url.php');
+$urlHelper = new Url();
+$shareUrlPhrases = $urlHelper->decodeShareUrl(isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '');
+$title = !empty($shareUrlPhrases) ? $config['site']['name'] . ': "' . implode('" or "', $shareUrlPhrases) . '"' : $config['site']['name'] . '? ' . $config['site']['desc'];
+$meta_desc = !empty($shareUrlPhrases) ? '' : $config['site']['desc'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,14 +19,14 @@ $site['meta_desc'] = !empty($phrases) ? '' : $site['app_desc'];
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="<?= $site['meta_desc'] ?>">
+    <meta name="description" content="<?= $meta_desc ?>">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title><?= htmlspecialchars($site['title']) ?></title>
+    <title><?= $title ?></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Baloo&display=swap">
-    <link rel="stylesheet" href="assets/css/app.min.css?_=<?= $cb ?>">
+    <link rel="stylesheet" href="assets/css/app.min.css?_=<?= $config['cb'] ?>">
 </head>
 <body>
     <div class="app container d-none js-app">
@@ -106,7 +94,7 @@ $site['meta_desc'] = !empty($phrases) ? '' : $site['app_desc'];
                     <div class="results__chart" v-show="results">
                         <canvas ref="chartCanvas"></canvas>
                     </div>
-                    <div class="results__share">
+                    <div class="results__share" v-show="results">
                         Share
                         <div class="input-group">
                             <input type="text" class="form-control" readonly ref="shareUrlInput" v-model="shareUrl">
@@ -124,10 +112,10 @@ $site['meta_desc'] = !empty($phrases) ? '' : $site['app_desc'];
         </footer>
     </div>
     <script>
-        var q = [];
+        var shareUrlPhrases = [];
         <?php 
-            foreach ($phrases as $p) {
-                echo "q.push('$p');";
+            foreach ($shareUrlPhrases as $p) {
+                echo "shareUrlPhrases.push('$p');";
             }
         ?>
     </script>

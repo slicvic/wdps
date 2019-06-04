@@ -2,10 +2,10 @@
 
 header('Content-Type: application/json');
 
-require_once(__DIR__ . '/config.php');
+require_once(__DIR__ . '/../config.php');
 require_once(__DIR__ . '/helpers/Db.php');
 require_once(__DIR__ . '/helpers/Search.php');
-require_once(__DIR__ . '/helpers/TinyUrl.php');
+require_once(__DIR__ . '/helpers/Url.php');
 
 $input = isset($_GET) ? $_GET : null;
 
@@ -59,14 +59,9 @@ usort($totalResultsByPhrase, function($a, $b) {
 });
 
 // Prepare response
+$urlHelper = new Url();
 $response = [];
-
-// Create share url
-$encodedPhrases = [];
-foreach ($input['q'] as $q) {
-    $encodedPhrases[] = urlencode($q);
-}
-$response['share_url'] = TinyUrl::create($config['base_url'] . '?q='. implode(',', $encodedPhrases));
+$response['share_url'] = $urlHelper->createTinyUrl($urlHelper->createShareUrl($config['base_url'], $input['q']));
 
 // Calculate percents
 $response['results'] = [];
