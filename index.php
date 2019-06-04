@@ -94,6 +94,18 @@
             <small>Created by <a href="http://www.slicvic.com">slicvic.com</a></small>
         </footer>
     </div>
+    <script>
+        var q = [];
+        <?php 
+            if (isset($_GET['q']) && is_array($_GET['q']) && count($_GET['q']) >= 2 && count($_GET['q']) <= 3) {
+                foreach ($_GET['q'] as $q) {
+                    if (is_string($q)) {
+                        echo "q.push('" . htmlspecialchars($q) . "');";
+                    }
+                }
+            }
+        ?>
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.js"></script>

@@ -1,4 +1,4 @@
-(function(Vue, $, Chart) {
+(function(Vue, $, Chart, q) {
 
     new Vue({
         el: '.js-app',
@@ -25,11 +25,18 @@
         },
         mounted: function() {
             $(this.$el).removeClass('d-none');
+            
             $(this.$el).on('keypress', '.js-phrase-input', function(e) {
                 if (e.which === 13) {
                     this.search();
                 }
             }.bind(this));
+
+            // Auto search
+            if (q.length >= 2 && q.length <= 3) {
+                this.phrases = q;
+                this.search();
+            }
         },
         methods: {
             addPhrase: function() {
@@ -142,4 +149,4 @@
         }
     });
     
-})(window.Vue, window.jQuery, window.Chart);
+})(window.Vue, window.jQuery, window.Chart, window.q);
