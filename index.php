@@ -1,5 +1,20 @@
 <?php
-    $cb = 15;
+$cb = 16;
+$phrases = [];
+
+if (isset($_GET['q']) && is_string($_GET['q'])) {
+    $q = explode(',', $_GET['q']);
+    if (is_array($q) && count($q) >= 2 && count($q) <= 3) {
+        foreach ($q as $p) {
+            if (is_string($p)) {
+                $phrases[] = htmlspecialchars(trim($p));
+            }
+        }
+    }
+}
+
+$site['app_name'] = 'What do people say';
+$site['title'] = $site['meta_desc'] = !empty($phrases) ? implode(' vs. ', $phrases) : 'Search multiple phrases and see what do people say the most';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,9 +29,10 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Search multiple phrases and see what do people say the most.">
+    <meta name="application-name" content="<?= $site['app_name'] ?>">
+    <meta name="description" content="<?= $site['meta_desc'] ?>">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>What do people say - Search multiple phrases and see what do people say the most</title>
+    <title><?= $site['app_name'] ?> - <?= $site['title'] ?></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
@@ -109,15 +125,8 @@
     <script>
         var q = [];
         <?php 
-            if (isset($_GET['q']) && is_string($_GET['q'])) {
-                $phrases = explode(',', $_GET['q']);
-                if (is_array($phrases) && count($phrases) >= 2 && count($phrases) <= 3) {
-                    foreach ($phrases as $p) {
-                        if (is_string($p)) {
-                            echo "q.push('" . htmlspecialchars(trim($p)) . "');";
-                        }
-                    }
-                }
+            foreach ($phrases as $p) {
+                echo "q.push('$p');";
             }
         ?>
     </script>
