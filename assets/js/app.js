@@ -84,7 +84,7 @@
                 var that = this;
                 var params = [];
                 this.phrases.forEach(function(phrase) {
-                    params.push('phrases[]=' + phrase);
+                    params.push('q[]=' + phrase);
                 });
 
                 $.getJSON('/api/search.php', params.join('&')).done(function(response) {
@@ -105,11 +105,9 @@
                         chartData.push(r.percent);
                     });
 
-                    // Clear canvas
+                    // Clear old chart
                     var canvas = $(that.$refs.chart_canvas)[0];
                     canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
-        
-                    // Destroy old chart
                     if (that.chart) {
                         that.chart.destroy();
                     }

@@ -9,7 +9,7 @@ require_once(__DIR__ . '/helpers/Search.php');
 $input = !empty($_GET) ? $_GET : null;
 
 // Exit early if input is invalid
-$validInput = !empty($input['phrases']) && is_array($input['phrases']) && count($input['phrases']) > 1;
+$validInput = !empty($input['q']) && is_array($input['q']) && count($input['q']) > 1;
 if (!$validInput) {
     http_response_code(400);
     exit;
@@ -20,7 +20,7 @@ $totalHitsByPhrase = [];
 
 // Perform searches and tally totals
 $searchSvc = new Search($config['search_engine']);
-foreach ($input['phrases'] as &$phrase) {
+foreach ($input['q'] as &$phrase) {
     $phrase = substr($phrase, 0, $config['phrase_max_length'] );
     $twitterTotal = $searchSvc->search($phrase, 'twitter.com');
     $redditTotal = $searchSvc->search($phrase, 'reddit.com');
@@ -36,7 +36,7 @@ foreach ($input['phrases'] as &$phrase) {
 try {
     $db = new Db($config['db']['host'], $config['db']['name'], $config['db']['user'], $config['db']['pass']);
     $db->logSearch(
-        json_encode($input['phrases']), 
+        json_encode($input['q']), 
         isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : ''
     );
 } catch (Exception $e) {}
