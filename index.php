@@ -4,7 +4,7 @@ require_once(__DIR__ . '/api/helpers/Url.php');
 $urlHelper = new Url();
 $shareUrlPhrases = !empty($_GET['q']) ? $urlHelper->decodeShareUrlQuery($_GET['q']) : [];
 $title = !empty($shareUrlPhrases) ? $config['site']['name'] . '?' : $config['site']['name'] . '? ' . $config['site']['desc'];
-$metaDesc = !empty($shareUrlPhrases) ? implode("' or '" , $shareUrlPhrases) : $config['site']['desc'];
+$metaDesc = !empty($shareUrlPhrases) ? "'" . implode("' or '" , $shareUrlPhrases) . "'" : $config['site']['desc'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
