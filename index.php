@@ -3,8 +3,8 @@ require_once(__DIR__ . '/config.php');
 require_once(__DIR__ . '/api/helpers/Url.php');
 $urlHelper = new Url();
 $shareUrlPhrases = !empty($_GET['q']) ? $urlHelper->decodeShareUrlQuery($_GET['q']) : [];
-$title = !empty($shareUrlPhrases) ? $config['site']['name'] . "? '" . implode("' or '" , $shareUrlPhrases) . "'" : $config['site']['name'] . '? ' . $config['site']['desc'];
-$metaDesc = '';
+$title = $config['site']['name'] . '?';
+$desc = !empty($shareUrlPhrases) ? "'" . implode("' or '" , $shareUrlPhrases) . "'" :  $config['site']['desc'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,8 +19,13 @@ $metaDesc = '';
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="<?= $metaDesc ?>">
+    <meta name="description" content="<?= $desc ?>">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta property="og:url"           content="<?= $config['base_url'] ?>">
+    <meta property="og:type"          content="website" />
+    <meta property="og:title"         content="<?= $title ?>">
+    <meta property="og:description"   content="<? $desc ?>">
+    <meta property="og:image"         content="">
     <title><?= $title ?></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.css">
@@ -29,7 +34,17 @@ $metaDesc = '';
     <link rel="stylesheet" href="assets/css/app.min.css?_=<?= $config['cb'] ?>">
 </head>
 <body>
+    <!-- Load Facebook SDK for JavaScript -->
     <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+    fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- /Load Facebook SDK for JavaScript -->
+
     <div class="app container d-none js-app">
         <header>
             <h1 class="logo">
@@ -110,7 +125,11 @@ $metaDesc = '';
         </main>
         <footer class="footer">
             <div class="mb-3">
-                <div class="fb-share-button" v-bind:data-href="showResults && results ? shareUrl : '<?= $config['base_url'] ?>'" data-layout="button_count" data-size="small"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwhatdopeoplesay.com%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
+                <div 
+                    class="fb-share-button" 
+                    v-bind:data-href="showResults && results ? shareUrl : '<?= $config['base_url'] ?>'"
+                    data-layout="button_count">
+                </div>
             </div>
             <small>With <i class="fa fa-heart"></i> by <a href="http://www.slicvic.com">slicvic.com</a></small>
         </footer>
@@ -123,7 +142,6 @@ $metaDesc = '';
             }
         ?>
     </script>
-    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.3&appId=46562307102&autoLogAppEvents=1"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.js"></script>
