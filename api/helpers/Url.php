@@ -2,6 +2,22 @@
 
 class Url {
     /**
+     * @return string
+     */
+    public function baseUrl()
+    {
+        return 'http://' . $_SERVER['SERVER_NAME'];
+    }
+
+    /**
+     * @return string
+     */
+    public function currentUrl()
+    {
+        return $this->baseUrl() . $_SERVER['REQUEST_URI'];
+    }
+
+    /**
      * @param string $url
      * @return string
      */
@@ -16,13 +32,12 @@ class Url {
     }
 
     /**
-     * @param string $baseUrl
      * @param array $phrases
      * @return string
      */
-    public function createShareUrl($baseUrl, array $phrases)
+    public function createShareUrl(array $phrases)
     {  
-        return $baseUrl . '?q='. urlencode(implode('|', $phrases));
+        return $this->baseUrl() . '?q='. urlencode(implode('|', $phrases));
     }
 
     /**

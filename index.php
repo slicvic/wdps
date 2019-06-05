@@ -4,12 +4,12 @@ require_once(__DIR__ . '/api/helpers/Url.php');
 $urlHelper = new Url();
 $shareUrlPhrases = !empty($_GET['q']) ? $urlHelper->decodeShareUrlQuery($_GET['q']) : [];
 $title = $config['site']['name'] . '?';
-$desc = !empty($shareUrlPhrases) ? "'" . implode("' or '" , $shareUrlPhrases) . "'" :  $config['site']['desc'];
+$desc = !empty($shareUrlPhrases) ? "'" . implode("' vs. '" , $shareUrlPhrases) . "'" :  $config['site']['desc'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-141288767-1"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -17,15 +17,15 @@ $desc = !empty($shareUrlPhrases) ? "'" . implode("' or '" , $shareUrlPhrases) . 
         gtag('js', new Date());
         gtag('config', 'UA-141288767-1');
     </script>
+    <!-- End Google Analytics -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="<?= $desc ?>">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta property="og:url"           content="<?= $config['base_url'] ?>">
-    <meta property="og:type"          content="website" />
-    <meta property="og:title"         content="<?= $title ?>">
-    <meta property="og:description"   content="<? $desc ?>">
-    <meta property="og:image"         content="">
+    <meta property="og:url" content="<?= $urlHelper->baseUrl() ?>">
+    <meta property="og:title" content="<?= $title ?>">
+    <meta property="og:description" content="<? $desc ?>">
+    <meta property="og:image" content="">
     <title><?= $title ?></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.css">
@@ -36,9 +36,14 @@ $desc = !empty($shareUrlPhrases) ? "'" . implode("' or '" , $shareUrlPhrases) . 
 <body>
     <!-- Load Facebook SDK for JavaScript -->
     <div id="fb-root"></div>
-    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.3&appId=46562307102&autoLogAppEvents=1"></script>
-    <!-- /Load Facebook SDK for JavaScript -->
-
+    <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+    fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- End Load Facebook SDK for JavaScript -->
     <div class="app container d-none js-app">
         <header>
             <h1 class="logo">
@@ -48,7 +53,7 @@ $desc = !empty($shareUrlPhrases) ? "'" . implode("' or '" , $shareUrlPhrases) . 
                 <h2 class="subhead__text">
                     Type in some phrases to see what people say the most.
                     <br class="d-none d-sm-block"> 
-                    For example, <strong class="text-secondary">{{ examples[0] }}</strong> or <strong class="text-secondary">{{ examples[1] }}</strong>
+                    For example, <strong class="text-secondary">{{ examples[0] }}</strong> vs. <strong class="text-secondary">{{ examples[1] }}</strong>
                 </h2>
             </div>
         </header>
@@ -56,7 +61,7 @@ $desc = !empty($shareUrlPhrases) ? "'" . implode("' or '" , $shareUrlPhrases) . 
             <div class="col-md-6 mx-auto">
                 <form class="form" action="search.php" method="post" v-show="!showResults">
                     <div v-for="(phrase, i) in phrases">
-                        <div class="form__or" v-show="i > 0">or</div>
+                        <div class="form__or" v-show="i > 0">vs.</div>
                         <div class="d-flex">
                             <div class="flex-grow-1">
                                 <input
@@ -119,12 +124,13 @@ $desc = !empty($shareUrlPhrases) ? "'" . implode("' or '" , $shareUrlPhrases) . 
         </main>
         <footer class="footer">
             <div class="mb-3">
-                <div class="fb-share-button" v-bind:data-href="showResults && results ? shareUrl : '<?= $config['base_url'] ?>'" data-layout="button_count" data-size="small"><a target="_blank" v-bind:href="'https://www.facebook.com/sharer/sharer.php?u=' + (showResults && results ? shareUrl : '<?= $config['base_url'] ?>') + '%2F&amp;src=sdkpreparse'" class="fb-xfbml-parse-ignore">Share</a></div>
+                <div class="fb-share-button" v-bind:data-href="shareUrl" data-layout="button_count"></div>
             </div>
             <small>With <i class="fa fa-heart"></i> by <a href="http://www.slicvic.com">slicvic.com</a></small>
         </footer>
     </div>
     <script>
+        var baseUrl = '<?= $urlHelper->baseUrl() ?>';
         var shareUrlPhrases = [];
         <?php 
             foreach ($shareUrlPhrases as $p) {

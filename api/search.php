@@ -61,7 +61,7 @@ usort($totalResultsByPhrase, function($a, $b) {
 // Prepare response
 $urlHelper = new Url();
 $response = [];
-$response['share_url'] = $urlHelper->createTinyUrl($urlHelper->createShareUrl($config['base_url'], $input['q']));
+$response['share_url'] = $urlHelper->createTinyUrl($urlHelper->createShareUrl($input['q']));
 
 // Calculate percents
 $response['results'] = [];

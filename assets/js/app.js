@@ -1,4 +1,4 @@
-(function(Vue, $, Chart, shareUrlPhrases) {
+(function(Vue, $, Chart, shareUrlPhrases, baseUrl) {
 
     new Vue({
         el: '.js-app',
@@ -8,13 +8,13 @@
             validationErrors: [],
             maxPhrases: 3,
             minPhrases: 2,
-            //phrases: ['jordan goat', 'kobe goat', 'lebron goat'],
             phrases: ['', ''],
+            //phrases: ['jordan goat', 'kobe goat'],
             examples: ['Jordan GOAT', 'LeBron GOAT', 'Kobe GOAT'],
             chart: null,
             chartColors: ['#5d5d5a', '#ffcdab', '#d2c8c8'],
             results: {},
-            shareUrl: ''
+            shareUrl: baseUrl
         },
         computed: {
             showAddPhraseBtn: function() {
@@ -22,6 +22,11 @@
             },
             showRemovePhraseBtn: function() {
                 return this.phrases.length > this.minPhrases;
+            }
+        },
+        watch: {
+            shareUrl: function(n) {
+                $('meta[property="og:url"]').attr('content', n);
             }
         },
         mounted: function() {
@@ -39,7 +44,7 @@
                 }
             });
 
-            // Auto search
+            // Auto-search
             if (shareUrlPhrases.length >= 2 && shareUrlPhrases.length <= 3) {
                 this.phrases = shareUrlPhrases;
                 this.search();
@@ -99,6 +104,7 @@
 
                 this.showResults = false;
                 this.searching = true;
+                this.shareUrl = baseUrl;
 
                 var that = this;
                 var params = [];
@@ -126,7 +132,7 @@
                         chartData.push(r.percent);
                     });
 
-                    // Clear old chart
+                    // Reset chart
                     var canvas = $(that.$refs.chartCanvas)[0];
                     canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
                     if (that.chart) {
@@ -163,4 +169,4 @@
         }
     });
     
-})(window.Vue, window.jQuery, window.Chart, window.shareUrlPhrases);
+})(window.Vue, window.jQuery, window.Chart, window.shareUrlPhrases, window.baseUrl);

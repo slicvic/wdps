@@ -2,8 +2,7 @@
 
 $config = [];
 
-$config['base_url'] = 'http://whatdopeoplesay.com';
-$config['cb'] = 20;
+$config['cb'] = 21;
 
 $config['site']['name'] = 'What do people say';
 $config['site']['desc'] = 'Search multiple phrases and see what do people say the most';
