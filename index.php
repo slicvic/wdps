@@ -3,8 +3,8 @@ require_once(__DIR__ . '/config.php');
 require_once(__DIR__ . '/api/helpers/Url.php');
 $urlHelper = new Url();
 $shareUrlPhrases = !empty($_GET['q']) ? $urlHelper->decodeShareUrlQuery($_GET['q']) : [];
-$title = !empty($shareUrlPhrases) ? $config['site']['name'] . '?' : $config['site']['name'] . '? ' . $config['site']['desc'];
-$metaDesc = !empty($shareUrlPhrases) ? "'" . implode("' or '" , $shareUrlPhrases) . "'" : $config['site']['desc'];
+$title = !empty($shareUrlPhrases) ? $config['site']['name'] . "? '" . implode("' or '" , $shareUrlPhrases) . "'" : $config['site']['name'] . '? ' . $config['site']['desc'];
+$metaDesc = '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,6 +29,7 @@ $metaDesc = !empty($shareUrlPhrases) ? "'" . implode("' or '" , $shareUrlPhrases
     <link rel="stylesheet" href="assets/css/app.min.css?_=<?= $config['cb'] ?>">
 </head>
 <body>
+    <div id="fb-root"></div>
     <div class="app container d-none js-app">
         <header>
             <h1 class="logo">
@@ -108,6 +109,9 @@ $metaDesc = !empty($shareUrlPhrases) ? "'" . implode("' or '" , $shareUrlPhrases
             </div>
         </main>
         <footer class="footer">
+            <div class="mb-3">
+                <div class="fb-share-button" v-bind:data-href="showResults && results ? shareUrl : '<?= $config['base_url'] ?>'" data-layout="button_count" data-size="small"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwhatdopeoplesay.com%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
+            </div>
             <small>With <i class="fa fa-heart"></i> by <a href="http://www.slicvic.com">slicvic.com</a></small>
         </footer>
     </div>
@@ -119,6 +123,7 @@ $metaDesc = !empty($shareUrlPhrases) ? "'" . implode("' or '" , $shareUrlPhrases
             }
         ?>
     </script>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.3&appId=46562307102&autoLogAppEvents=1"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.js"></script>
