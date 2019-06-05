@@ -24,7 +24,7 @@ $desc = !empty($shareUrlPhrases) ? "'" . implode("' vs. '" , $shareUrlPhrases) .
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta property="og:url" content="<?= $urlHelper->baseUrl() ?>">
     <meta property="og:title" content="<?= $title ?>">
-    <meta property="og:description" content="<? $desc ?>">
+    <meta property="og:description" content="<?= $desc ?>">
     <meta property="og:image" content="">
     <title><?= $title ?></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
