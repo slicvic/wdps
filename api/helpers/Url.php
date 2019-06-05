@@ -16,34 +16,30 @@ class Url {
     }
 
     /**
-     * @param string $base_url
+     * @param string $baseUrl
      * @param array $phrases
      * @return string
      */
-    public function createShareUrl($base_url, array $phrases)
+    public function createShareUrl($baseUrl, array $phrases)
     {  
-        $encPhrases = [];
-        foreach ($phrases as $p) {
-            $encPhrases[] = urlencode($p);
-        }
-        return $base_url . '?q='. implode(',', $encPhrases);
+        return $baseUrl . '?q='. urlencode(implode('|', $phrases));
     }
 
     /**
-     * @param string $url
+     * @param string $query
      * @return array List of phrases
      */
-    public function decodeShareUrlPhrases($url)
+    public function decodeShareUrlQuery($query)
     {
         $phrases = [];
-        parse_str(parse_url($url, PHP_URL_QUERY), $params);
-        if (isset($params['q']) && is_string($params['q'])) {
-            $q = explode(',', $params['q']);
-            if (is_array($q) && count($q) >= 2 && count($q) <= 3) {
-                foreach ($q as $p) {
-                    if (is_string($p)) {
-                        $phrases[] = htmlspecialchars(trim($p));
-                    }
+        if (!is_string($query)) {
+            return $phrases;
+        }
+        $rawPhrases = explode('|', urldecode($query));
+        if (is_array($rawPhrases) && count($rawPhrases) >= 2 && count($rawPhrases) <= 3) {
+            foreach ($rawPhrases as $phrase) {
+                if (is_string($phrase)) {
+                    $phrases[] = htmlspecialchars(trim($phrase));
                 }
             }
         }

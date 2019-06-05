@@ -2,9 +2,9 @@
 require_once(__DIR__ . '/config.php');
 require_once(__DIR__ . '/api/helpers/Url.php');
 $urlHelper = new Url();
-$shareUrlPhrases = !empty($_SERVER['REQUEST_URI']) ? $urlHelper->decodeShareUrlPhrases($_SERVER['REQUEST_URI']) : [];
+$shareUrlPhrases = !empty($_GET['q']) ? $urlHelper->decodeShareUrlQuery($_GET['q']) : [];
 $title = !empty($shareUrlPhrases) ? $config['site']['name'] . ': "' . implode('" or "', $shareUrlPhrases) . '"' : $config['site']['name'] . '? ' . $config['site']['desc'];
-$meta_desc = !empty($shareUrlPhrases) ? '' : $config['site']['desc'];
+$metaDesc = !empty($shareUrlPhrases) ? '' : $config['site']['desc'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,7 +19,7 @@ $meta_desc = !empty($shareUrlPhrases) ? '' : $config['site']['desc'];
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="<?= $meta_desc ?>">
+    <meta name="description" content="<?= $metaDesc ?>">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title><?= $title ?></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
