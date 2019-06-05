@@ -36,13 +36,7 @@ $desc = !empty($shareUrlPhrases) ? "'" . implode("' or '" , $shareUrlPhrases) . 
 <body>
     <!-- Load Facebook SDK for JavaScript -->
     <div id="fb-root"></div>
-    <script>(function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
-    fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));</script>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.3&appId=46562307102&autoLogAppEvents=1"></script>
     <!-- /Load Facebook SDK for JavaScript -->
 
     <div class="app container d-none js-app">
@@ -125,11 +119,7 @@ $desc = !empty($shareUrlPhrases) ? "'" . implode("' or '" , $shareUrlPhrases) . 
         </main>
         <footer class="footer">
             <div class="mb-3">
-                <div 
-                    class="fb-share-button" 
-                    v-bind:data-href="showResults && results ? shareUrl : '<?= $config['base_url'] ?>'"
-                    data-layout="button_count">
-                </div>
+                <div class="fb-share-button" v-bind:data-href="showResults && results ? shareUrl : '<?= $config['base_url'] ?>'" data-layout="button_count" data-size="small"><a target="_blank" v-bind:href="'https://www.facebook.com/sharer/sharer.php?u=' + (showResults && results ? shareUrl : '<?= $config['base_url'] ?>') + '%2F&amp;src=sdkpreparse'" class="fb-xfbml-parse-ignore">Share</a></div>
             </div>
             <small>With <i class="fa fa-heart"></i> by <a href="http://www.slicvic.com">slicvic.com</a></small>
         </footer>
