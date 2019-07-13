@@ -18,4 +18,4 @@ $config['db']['user'] = 'homestead';
 $config['db']['pass'] = 'secret';
 
 $config['site']['title'] = 'What do people say?';
-$config['site']['meta_desc'] = 'Search multiple phrases to see which one do people say the most. For example, do more people say ' . "'" . implode("' or '", $config['examples']) . "'?";
+$config['site']['meta_desc'] = 'Search multiple phrases to see which one do more people say. For example, do more people say ' . "'" . implode("' or '", $config['examples']) . "'?";
