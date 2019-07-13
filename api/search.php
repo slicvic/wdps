@@ -60,11 +60,12 @@ usort($totalResultsByPhrase, function($a, $b) {
 
 // Prepare response
 $urlHelper = new UrlHelper();
+
 $response = [];
 $response['share_url'] = $urlHelper->createTinyUrl($urlHelper->createShareUrl($input['q']));
+$response['results'] = [];
 
 // Calculate percents
-$response['results'] = [];
 foreach ($totalResultsByPhrase as $t) {
     $response['results'][] = [
         'phrase' => $t['phrase'],
