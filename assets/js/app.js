@@ -13,6 +13,7 @@
             placeholders: ['Enter a phrase', 'Enter another phrase'],
             phrases: new Array(config.minPhrases).fill(''),
             chartColors: ['#ff7f7d', '#dfe6e9'],
+            chartLegendColors: ['#ff7f7d', '#b2bec3'],
             chart: null,
             results: {}
         },
