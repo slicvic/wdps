@@ -12,7 +12,7 @@
             examples: config.examples,
             placeholders: ['Enter a phrase', 'Enter another phrase'],
             phrases: new Array(config.minPhrases).fill(''),
-            chartColors: ['#5d5d5a', '#ffcdab'],
+            chartColors: ['#2f3542', '#ced6e0'],
             chart: null,
             results: {}
         },
