@@ -46,9 +46,9 @@
             </h1>
             <div class="subhead" v-show="!showResults">
                 <h2 class="subhead__text">
-                    Type in some phrases to see which one do more people say. 
+                    Type in some phrases to see which one do most people say. 
                     <br class="d-none d-sm-block"> 
-                    For example, do more people say <strong class="text-secondary">{{ examples[0] }}</strong> or <strong class="text-secondary">{{ examples[1] }}</strong>
+                    For example, do most people say <strong class="text-secondary">{{ examples[0] }}</strong> or <strong class="text-secondary">{{ examples[1] }}</strong>
                 </h2>
             </div>
         </header>
