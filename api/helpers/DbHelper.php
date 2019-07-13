@@ -1,9 +1,11 @@
 <?php
 
-class Db {
+class DbHelper
+{
     protected $pdo;
 
-    public function __construct($host, $name, $user, $pass) {
+    public function __construct($host, $name, $user, $pass)
+    {
         $this->pdo = new PDO('mysql:host=' . $host . ';dbname=' . $name, $user, $pass);
     }
 

@@ -3,9 +3,9 @@
 header('Content-Type: application/json');
 
 require_once(__DIR__ . '/../config.php');
-require_once(__DIR__ . '/helpers/Db.php');
-require_once(__DIR__ . '/helpers/Search.php');
-require_once(__DIR__ . '/helpers/Url.php');
+require_once(__DIR__ . '/helpers/DbHelper.php');
+require_once(__DIR__ . '/helpers/SearchHelper.php');
+require_once(__DIR__ . '/helpers/UrlHelper.php');
 
 $input = isset($_GET) ? $_GET : null;
 
@@ -22,7 +22,7 @@ $input['q'] = array_slice($input['q'], 0, $config['max_phrases']);
 // Perform searches and tally totals
 $totalResults = 0;
 $totalResultsByPhrase = [];
-$searchHelper = new Search($config['search_engine']);
+$searchHelper = new SearchHelper($config['search_engine']);
 
 foreach ($input['q'] as &$phrase) {
     $phrase = substr($phrase, 0, $config['phrase_max_length'] );
@@ -38,7 +38,7 @@ foreach ($input['q'] as &$phrase) {
 
 // Log search
 try {
-    $dbHelper = new Db($config['db']['host'], $config['db']['name'], $config['db']['user'], $config['db']['pass']);
+    $dbHelper = new DbHelper($config['db']['host'], $config['db']['name'], $config['db']['user'], $config['db']['pass']);
     $dbHelper->logSearch(
         json_encode($input['q']), 
         isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : ''
@@ -59,7 +59,7 @@ usort($totalResultsByPhrase, function($a, $b) {
 });
 
 // Prepare response
-$urlHelper = new Url();
+$urlHelper = new UrlHelper();
 $response = [];
 $response['share_url'] = $urlHelper->createTinyUrl($urlHelper->createShareUrl($input['q']));
 

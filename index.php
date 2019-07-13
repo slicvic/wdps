@@ -1,11 +1,5 @@
-<?php
-require_once(__DIR__ . '/config.php');
-require_once(__DIR__ . '/api/helpers/Url.php');
-$urlHelper = new Url();
-$shareUrlPhrases = !empty($_GET['q']) ? $urlHelper->decodeShareUrlQuery($_GET['q']) : [];
-$title = $config['site']['name'] . '?';
-$desc = !empty($shareUrlPhrases) ? "'" . implode("' vs. '" , $shareUrlPhrases) . "'" :  $config['site']['desc'];
-?>
+<?php require_once(__DIR__ . '/config.php') ?>
+<?php require_once(__DIR__ . '/bootstrap.php') ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,13 +14,14 @@ $desc = !empty($shareUrlPhrases) ? "'" . implode("' vs. '" , $shareUrlPhrases) .
     <!-- End Google Analytics -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="<?= $desc ?>">
+    <meta name="description" content="<?= $meta_desc ?>">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta property="og:url" content="<?= $urlHelper->baseUrl() ?>">
-    <meta property="og:title" content="<?= $title ?>">
-    <meta property="og:description" content="<?= $desc ?>">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="<?= $config['site']['title'] ?>">
+    <meta property="og:description" content="<?= $meta_desc ?>">
     <meta property="og:image" content="">
-    <title><?= $title ?></title>
+    <title><?= $config['site']['title'] ?></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
@@ -51,9 +46,9 @@ $desc = !empty($shareUrlPhrases) ? "'" . implode("' vs. '" , $shareUrlPhrases) .
             </h1>
             <div class="subhead" v-show="!showResults">
                 <h2 class="subhead__text">
-                    Type in some phrases to see what people say the most.
+                    Type in some phrases to see which one do people say the most. 
                     <br class="d-none d-sm-block"> 
-                    For example, <strong class="text-secondary">{{ examples[0] }}</strong> vs. <strong class="text-secondary">{{ examples[1] }}</strong>
+                    For example, do more people say <strong class="text-secondary">{{ examples[0] }}</strong> or <strong class="text-secondary">{{ examples[1] }}</strong>
                 </h2>
             </div>
         </header>
@@ -61,14 +56,14 @@ $desc = !empty($shareUrlPhrases) ? "'" . implode("' vs. '" , $shareUrlPhrases) .
             <div class="col-md-6 mx-auto">
                 <form class="form" action="search.php" method="post" v-show="!showResults">
                     <div v-for="(phrase, i) in phrases">
-                        <div class="form__or" v-show="i > 0">vs.</div>
+                        <div class="mt-3" v-show="i > 0"></div>
                         <div class="d-flex">
                             <div class="flex-grow-1">
                                 <input
                                     class="form__input form-control form-control-lg js-phrase-input"
                                     type="text"
                                     maxlength="100"
-                                    v-bind:placeholder="'e.g. ' + examples[i]"
+                                    v-bind:placeholder="placeholders[i]"
                                     v-bind:class="{ 'is-invalid': validationErrors[i] }"
                                     v-bind:disabled="searching"
                                     v-on:keyup="handlePhraseInputKeyup(i)"
@@ -118,23 +113,27 @@ $desc = !empty($shareUrlPhrases) ? "'" . implode("' vs. '" , $shareUrlPhrases) .
                             </div>
                         </div>
                     </div>
-                    <button type="button" class="results__try-again-btn btn btn-link" v-on:click="hideResults">Try Again!</button>
+                    <button type="button" class="results__try-again-btn btn btn-link" v-on:click="tryAgain">Try Again!</button>
                 </div>
             </div>
         </main>
         <footer class="footer">
             <div class="mb-3">
-                <div class="fb-share-button" v-bind:data-href="shareUrl" data-layout="button_count"></div>
+                <div class="fb-share-button" data-layout="button_count" data-href="<?= $urlHelper->baseUrl() ?>"></div>
             </div>
             <small>With <i class="fa fa-heart"></i> by <a href="http://www.slicvic.com">slicvic.com</a></small>
         </footer>
     </div>
     <script>
-        var baseUrl = '<?= $urlHelper->baseUrl() ?>';
-        var shareUrlPhrases = [];
+        var appConfig = {
+            minPhrases: <?= $config['min_phrases'] ?>,
+            maxPhrases: <?= $config['max_phrases'] ?>,
+            examples: <?= json_encode($config['examples']) ?>,
+            phrases: []
+        };
         <?php 
-            foreach ($shareUrlPhrases as $p) {
-                echo "shareUrlPhrases.push('$p');";
+            foreach ($phrases as $p) {
+                echo "appConfig.phrases.push('$p');";
             }
         ?>
     </script>

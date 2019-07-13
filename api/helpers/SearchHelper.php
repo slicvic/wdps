@@ -1,7 +1,7 @@
 <?php
 
-class Search {
-
+class SearchHelper 
+{
     const SEARCH_ENGINE_GOOGLE = 'google';
     const SEARCH_ENGINE_BING = 'bing';
 

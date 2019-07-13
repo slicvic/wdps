@@ -1,6 +1,7 @@
 <?php
 
-class Url {
+class UrlHelper
+{
     /**
      * @return string
      */
@@ -44,20 +45,29 @@ class Url {
      * @param string $query
      * @return array List of phrases
      */
-    public function decodeShareUrlQuery($query)
+    public function decodeSearchQuery($query)
     {
         $phrases = [];
         if (!is_string($query)) {
             return $phrases;
         }
         $rawPhrases = explode('|', urldecode($query));
-        if (is_array($rawPhrases) && count($rawPhrases) >= 2 && count($rawPhrases) <= 3) {
+        if (is_array($rawPhrases)) {
             foreach ($rawPhrases as $phrase) {
                 if (is_string($phrase)) {
                     $phrases[] = htmlspecialchars(trim($phrase));
                 }
             }
         }
+        return $phrases;
+    }
+
+    /**
+     * @return array List of phrases
+     */
+    public function decodeCurrentSearchQuery()
+    {
+        $phrases = !empty($_GET['q']) ? $this->decodeSearchQuery($_GET['q']) : [];
         return $phrases;
     }
 }

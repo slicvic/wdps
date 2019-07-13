@@ -1,4 +1,4 @@
-(function(Vue, $, Chart, shareUrlPhrases, baseUrl) {
+(function(config, Vue, $, Chart) {
 
     new Vue({
         el: '.js-app',
@@ -6,15 +6,15 @@
             searching: false,
             showResults: false,
             validationErrors: [],
-            maxPhrases: 3,
-            minPhrases: 2,
-            phrases: ['', ''],
-            //phrases: ['jordan goat', 'kobe goat'],
-            examples: ['Jordan GOAT', 'LeBron GOAT', 'Kobe GOAT'],
+            shareUrl: '',
+            minPhrases: config.minPhrases,
+            maxPhrases: config.maxPhrases,
+            examples: config.examples,
+            placeholders: ['Enter a phrase', 'Enter another phrase'],
+            phrases: new Array(config.minPhrases).fill(''),
+            chartColors: ['#5d5d5a', '#ffcdab'],
             chart: null,
-            chartColors: ['#5d5d5a', '#ffcdab', '#d2c8c8'],
-            results: {},
-            shareUrl: baseUrl
+            results: {}
         },
         computed: {
             showAddPhraseBtn: function() {
@@ -24,29 +24,25 @@
                 return this.phrases.length > this.minPhrases;
             }
         },
-        watch: {
-            shareUrl: function(n) {
-                $('meta[property="og:url"]').attr('content', n);
+        created: function() {
+            for (var i in config.phrases) {
+                this.phrases[i] = config.phrases[i];
             }
         },
         mounted: function() {
-            var that = this;
-
             $(this.$el).removeClass('d-none');
-            
+
             $(this.$refs.shareUrlInput).focus(function() {
                 $(this).select();
             });
 
             $(this.$el).on('keypress', '.js-phrase-input', function(e) {
                 if (e.which === 13) {
-                    that.search();
+                    this.search();
                 }
-            });
+            }.bind(this));
 
-            // Auto-search
-            if (shareUrlPhrases.length >= 2 && shareUrlPhrases.length <= 3) {
-                this.phrases = shareUrlPhrases;
+            if (config.phrases.length) {
                 this.search();
             }
         },
@@ -59,62 +55,58 @@
             removePhrase: function(index) {
                 this.phrases.splice(index, 1);
             },
-            hideResults: function() {
+            tryAgain: function() {
                 this.showResults = false;
             },
             copyShareUrl: function() {
                 $(this.$refs.shareUrlInput).select();
                 document.execCommand('copy');
             },
-            handlePhraseInputKeyup: function(index) {
-                this.validatePhrases(index);
+            handlePhraseInputKeyup: function(i) {
+                this.validatePhraseInput(i);
             },
-            /**
-             * Validate all phrases or the phrase at the specified index.
-             * @param {integer} index Index of the phrase to validate.
-             * @return {boolean}
-             */
-            validatePhrases: function(index) {
-                var valid = true;
-
-                for (var i = 0; i < this.phrases.length; i++) {
-                    if (typeof index !== 'undefined' && index != i) {
-                        continue;
-                    }
-                    
-                    var phrase = this.phrases[i].trim().replace(/\s\s+/g, ' ');
-
-                    if (phrase == '') {
-                        valid = false;
-                        Vue.set(this.validationErrors, i, 'Phrase cannot be blank!');
-                    } else if (phrase.split(' ').length < 2) {
-                        valid = false;
-                        Vue.set(this.validationErrors, i, 'Phrase must be 2 or more words!');
-                    } else {
-                        Vue.set(this.validationErrors, i, '');
+            validatePhrase: function(phrase) {
+                if (!(typeof phrase === 'string' && phrase.length)) {
+                    return 'Phrase cannot be blank!';
+                }
+                
+                if (phrase.split(' ').length < 2) {
+                    return 'Phrase must be 2 or more words!';
+                } 
+                
+                return '';
+            },
+            validatePhraseInput: function(i) {
+                var error = this.validatePhrase(this.phrases[i]);
+                Vue.set(this.validationErrors, i, error);
+                return !error;
+            },
+            validateForm: function() {
+                var error = false;
+                for (var i in this.phrases) {
+                    if (!this.validatePhraseInput(i)) {
+                        error = true;
                     }
                 }
-
-                return valid;
+                return !error;
             },
             search: function() {
-                if (!this.validatePhrases()) {
+                if (!this.validateForm()) {
                     return;
                 }
-
+                
                 this.showResults = false;
                 this.searching = true;
-                this.shareUrl = baseUrl;
 
-                var that = this;
-                var params = [];
-
+                var queryParams = [];
                 this.phrases.forEach(function(phrase) {
-                    params.push('q[]=' + phrase);
+                    queryParams.push('q[]=' + phrase);
                 });
 
-                $.getJSON('/api/search.php', params.join('&')).done(function(response) {
-                    if (typeof response.results !== 'object') {
+                var that = this;
+
+                $.getJSON('/api/search.php', queryParams.join('&')).always(function(response) {
+                    if (!(typeof response === 'object' && typeof response.results === 'object')) {
                         that.results = false;
                         that.searching = false;
                         that.showResults = true;
@@ -132,7 +124,7 @@
                         chartData.push(r.percent);
                     });
 
-                    // Reset chart
+                    // Init chart
                     var canvas = $(that.$refs.chartCanvas)[0];
                     canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
                     if (that.chart) {
@@ -160,13 +152,9 @@
                             }
                         });
                     }, 100);
-                }).fail(function() {
-                    that.results = false;
-                    that.showResults = true;
-                    that.searching = false;
                 });
             }
         }
     });
     
-})(window.Vue, window.jQuery, window.Chart, window.shareUrlPhrases, window.baseUrl);
+})(window.appConfig, window.Vue, window.jQuery, window.Chart);
