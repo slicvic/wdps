@@ -7,7 +7,8 @@ $colors: (
     tertiary: #6a4447,
     tertiary-dark: #89585c,
     link: #b18589,
-    placeholder: #f5ce97,
+    /*placeholder: #f5ce97,*/
+    placeholder: #f2c078,
     placeholder-invalid: #ee9aa2
 );
 
@@ -30,7 +31,7 @@ a:visited {
     font-family: 'Baloo', cursive;
     color: map-get($colors, 'tertiary');
     text-align: center;
-    margin-top: 1rem;
+    margin-top: 4rem;
 }
 
 .footer {
@@ -51,14 +52,10 @@ a:visited {
 }
 
 .subhead {
-    margin-top: .5rem;
+    margin-top: 1rem;
     margin-bottom: 1.5rem;
-}
-
-.subhead__text {
-    margin: 0;
-    font-size: 1rem;
-    line-height: 1.5;
+    font-size: 1.150rem;
+    line-height: 2;
 }
 
 .form__input,
@@ -69,6 +66,10 @@ a:visited {
     color: map-get($colors, 'tertiary');
     -webkit-text-fill-color: map-get($colors, 'tertiary');
     text-align: center;
+}
+
+.form__input-row {
+    margin-bottom: 1.5rem;
 }
 
 .form__input.is-invalid {
@@ -83,10 +84,6 @@ a:visited {
 .form__input.is-invalid::placeholder {
     color: map-get($colors, 'placeholder-invalid');
     -webkit-text-fill-color: map-get($colors, 'placeholder-invalid');
-}
-
-.form__or {
-    margin: .5rem 0;
 }
 
 .form__add-btn {
@@ -153,5 +150,10 @@ a:visited {
     
     .logo strong {
         font-size: 2.5rem;
+    }
+
+    .subhead {
+        line-height: 1.8;
+        font-size: 1.05rem;
     }
 }

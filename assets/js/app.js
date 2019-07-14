@@ -71,7 +71,7 @@
                     return 'Phrase cannot be blank!';
                 }
                 
-                if (phrase.split(' ').length < 2) {
+                if (phrase.trim().split(' ').length < 2) {
                     return 'Phrase must be 2 or more words!';
                 } 
                 

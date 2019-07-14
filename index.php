@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Baloo&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Baloo">
     <link rel="stylesheet" href="assets/css/app.min.css?_=<?= $config['cb'] ?>">
 </head>
 <body>
@@ -44,42 +44,38 @@
             <h1 class="logo">
                 <strong>W</strong>hat <strong>D</strong>o <strong>P</strong>eople <strong>S</strong>ay<strong>?</strong>
             </h1>
-            <div class="subhead" v-show="!showResults">
-                <h2 class="subhead__text">
-                    Type in some phrases to see which one do most people say. 
-                    <br class="d-none d-sm-block"> 
-                    For example, do most people say <strong class="text-secondary">{{ examples[0] }}</strong> or <strong class="text-secondary">{{ examples[1] }}</strong>
-                </h2>
-            </div>
+            <h2 class="subhead" v-show="!showResults">
+                Type in some phrases and see which one do most people say. 
+                <span class="d-sm-block">
+                    For example, do most people say <strong class="text-secondary" v-html="examples[0]"></strong> or <strong class="text-secondary" v-html="examples[1]"></strong>
+                </span> 
+            </h2>
         </header>
         <main class="row">
             <div class="col-md-6 mx-auto">
                 <form class="form" action="search.php" method="post" v-show="!showResults">
-                    <div v-for="(phrase, i) in phrases">
-                        <div class="mt-3" v-show="i > 0"></div>
-                        <div class="d-flex">
-                            <div class="flex-grow-1">
-                                <input
-                                    class="form__input form-control form-control-lg js-phrase-input"
-                                    type="text"
-                                    maxlength="100"
-                                    v-bind:placeholder="placeholders[i]"
-                                    v-bind:class="{ 'is-invalid': validationErrors[i] }"
-                                    v-bind:disabled="searching"
-                                    v-on:keyup="handlePhraseInputKeyup(i)"
-                                    v-model="phrases[i]">
-                                <div class="invalid-feedback" v-show="validationErrors[i]">{{ validationErrors[i] }}</div>
-                            </div>
-                            <div class="flex-shrink-1 align-self-center">
-                                <button 
-                                    type="button"
-                                    class="form__remove-btn btn btn-link"
-                                    v-on:click="removePhrase(i)"
-                                    v-show="showRemovePhraseBtn"
-                                    v-bind:disabled="searching">
-                                    <i class="fa fa-times"></i>
-                                </button>
-                            </div>
+                    <div class="d-flex form__input-row" v-for="(phrase, i) in phrases">
+                        <div class="flex-grow-1">
+                            <input
+                                class="form__input form-control form-control-lg js-phrase-input"
+                                type="text"
+                                maxlength="100"
+                                v-bind:placeholder="placeholders[i]"
+                                v-bind:class="{ 'is-invalid': validationErrors[i] }"
+                                v-bind:disabled="searching"
+                                v-on:keyup="handlePhraseInputKeyup(i)"
+                                v-model="phrases[i]">
+                            <div class="invalid-feedback" v-show="validationErrors[i]">{{ validationErrors[i] }}</div>
+                        </div>
+                        <div class="flex-shrink-1 align-self-center">
+                            <button 
+                                type="button"
+                                class="form__remove-btn btn btn-link"
+                                v-on:click="removePhrase(i)"
+                                v-show="showRemovePhraseBtn"
+                                v-bind:disabled="searching">
+                                <i class="fa fa-times"></i>
+                            </button>
                         </div>
                     </div>
                     <button
