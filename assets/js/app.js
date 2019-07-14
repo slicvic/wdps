@@ -61,10 +61,21 @@
             },
             copyShareUrl: function() {
                 var $input = $(this.$refs.shareUrlInput);
-                //$input.prop('readonly', false);
-                $input.select();
+                $input.prop('readonly', false);
+
+                if (navigator.userAgent.match(/ipad|iphone/i)) {
+                    var range = document.createRange();
+                    range.selectNodeContents($input[0]);
+                    var selection = window.getSelection();
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                    $input[0].setSelectionRange(0, 999999);
+                } else {
+                    $input.select();
+                }
+         
                 document.execCommand('copy');
-                //$input.prop('readonly', true);
+                $input.prop('readonly', true);
             },
             handlePhraseInputKeyup: function(i) {
                 this.validatePhraseInput(i);
