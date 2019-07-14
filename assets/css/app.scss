@@ -144,6 +144,10 @@ a:visited {
 
 /* Extra small devices (portrait phones, less than 576px) */
 @media (max-width: 575px) {  
+    .app {
+        margin-top: 1rem;
+    }
+
     .logo {
         font-size: 2rem;
     }

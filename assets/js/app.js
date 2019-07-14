@@ -135,6 +135,12 @@
                     that.searching = false;
                     that.showResults = true;
 
+                    window.scrollTo({
+                        top: 0,
+                        left: 0,
+                        behavior: 'smooth'
+                    });
+
                     // Render chart (small timeout needed for rotate animation)
                     setTimeout(function() {
                         that.chart = new Chart(canvas, {
