@@ -102,14 +102,14 @@
                     </div>
                     <div class="results__share" v-show="results">
                         Share
-                        <div class="input-group">
-                            <form>
-                                <input type="text" class="form-control" readonly ref="shareUrlInput" v-model="shareUrl">
-                            </form>
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-dark" type="button" v-on:click="copyShareUrl">Copy</button>
+                        <form>
+                            <div class="input-group">
+                                <input type="text" class="form-control" ref="shareUrlInput" v-model="shareUrl">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-dark" type="button" v-on:click="copyShareUrl">Copy</button>
+                                </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
                     <button type="button" class="results__try-again-btn btn btn-link" v-on:click="tryAgain">Try Again!</button>
                 </div>
