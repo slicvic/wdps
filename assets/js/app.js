@@ -62,11 +62,15 @@
             copyShareUrl: function() {
                 try {
                     var input = this.$refs.shareUrlInput;
-                    var range = document.createRange();
-                    range.selectNode(input);
-                    var selection = window.getSelection();
-                    selection.removeAllRanges();
-                    selection.addRange(range);
+                    if (navigator.userAgent.match(/ipad|iphone/i)) {
+                        var range = document.createRange();
+                        range.selectNode(input);
+                        var selection = window.getSelection();
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                    } else {
+                        input.select();
+                    }
                     document.execCommand('copy');
                 } catch (e) {}
             },
