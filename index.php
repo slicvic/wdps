@@ -103,7 +103,9 @@
                     <div class="results__share" v-show="results">
                         Share
                         <div class="input-group">
-                            <input type="text" class="form-control" readonly ref="shareUrlInput" v-model="shareUrl">
+                            <form>
+                                <input type="text" class="form-control" readonly ref="shareUrlInput" v-model="shareUrl">
+                            </form>
                             <div class="input-group-append">
                                 <button class="btn btn-outline-dark" type="button" v-on:click="copyShareUrl">Copy</button>
                             </div>

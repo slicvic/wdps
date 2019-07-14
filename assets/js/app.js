@@ -60,8 +60,11 @@
                 this.showResults = false;
             },
             copyShareUrl: function() {
-                $(this.$refs.shareUrlInput).select();
+                var $input = $(this.$refs.shareUrlInput);
+                $input.prop('readonly', false);
+                $input.select();
                 document.execCommand('copy');
+                $input.prop('readonly', true);
             },
             handlePhraseInputKeyup: function(i) {
                 this.validatePhraseInput(i);
