@@ -60,22 +60,24 @@
                 this.showResults = false;
             },
             copyShareUrl: function() {
-                var $input = $(this.$refs.shareUrlInput);
-                $input.prop('readonly', false);
+                var input = this.$refs.shareUrlInput;
+                input.contentEditable = true;
+                input.readOnly = false;
 
                 if (navigator.userAgent.match(/ipad|iphone/i)) {
                     var range = document.createRange();
-                    range.selectNodeContents($input[0]);
+                    range.selectNodeContents(input);
                     var selection = window.getSelection();
                     selection.removeAllRanges();
                     selection.addRange(range);
-                    $input[0].setSelectionRange(0, 999999);
+                    input.setSelectionRange(0, 999999);
                 } else {
-                    $input.select();
+                    input.select();
                 }
          
                 document.execCommand('copy');
-                $input.prop('readonly', true);
+                input.contentEditable = false;
+                input.readOnly = true;            
             },
             handlePhraseInputKeyup: function(i) {
                 this.validatePhraseInput(i);
