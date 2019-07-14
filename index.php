@@ -119,7 +119,9 @@
             <div class="mb-3">
                 <div class="fb-share-button" data-layout="button_count" data-href="<?= $urlHelper->baseUrl() ?>"></div>
             </div>
+            <?php /*
             <small>With <i class="fa fa-heart"></i> by <a href="http://www.slicvic.com">slicvic.com</a></small>
+            */ ?>
         </footer>
     </div>
     <script>
