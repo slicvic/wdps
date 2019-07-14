@@ -12,8 +12,8 @@
             examples: config.examples,
             placeholders: ['Enter a phrase', 'Enter another phrase'],
             phrases: new Array(config.minPhrases).fill(''),
-            chartLegendColors: ['#ff7f7d', '#999ba7'],
-            chartColors: ['#ff7f7d', '#ebebee'],
+            chartLegendColors: ['#ff6f6c', '#999ba7'],
+            chartColors: ['#ff6f6c', '#ebebee'],
             chart: null,
             results: {}
         },
