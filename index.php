@@ -45,7 +45,7 @@
                 <strong>W</strong>hat <strong>D</strong>o <strong>P</strong>eople <strong>S</strong>ay<strong>?</strong>
             </h1>
             <h2 class="subhead" v-show="!showResults">
-                    Enter two phrases and see which one most people say. 
+                    Enter 2 phrases and see which one most people say. 
                 <span class="d-sm-block">
                     For example, do most people say <strong class="text-secondary" v-html="examples[0]"></strong> or <strong class="text-secondary" v-html="examples[1]"></strong>
                 </span> 
