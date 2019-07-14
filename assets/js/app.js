@@ -62,7 +62,7 @@
             copyShareUrl: function() {
                 var input = this.$refs.shareUrlInput;
                 input.contentEditable = true;
-                input.readOnly = false;
+                //input.readOnly = false;
 
                 if (navigator.userAgent.match(/ipad|iphone/i)) {
                     var range = document.createRange();
@@ -77,7 +77,7 @@
          
                 document.execCommand('copy');
                 input.contentEditable = false;
-                input.readOnly = true;            
+                //input.readOnly = true;            
             },
             handlePhraseInputKeyup: function(i) {
                 this.validatePhraseInput(i);
