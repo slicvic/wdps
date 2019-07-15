@@ -79,11 +79,11 @@
             },
             validatePhrase: function(phrase) {
                 if (!(typeof phrase === 'string' && phrase.length)) {
-                    return 'Phrase cannot be blank';
+                    return 'Phrase has to be 2 or more words';
                 }
                 
                 if (phrase.trim().split(' ').length < 2) {
-                    return 'Phrase must be 2 or more words';
+                    return 'Phrase has to be 2 or more words';
                 } 
                 
                 return '';
