@@ -14,12 +14,12 @@
     <!-- End Google Analytics -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="<?= $meta_desc ?>">
+    <meta name="description" content="<?= META_DESC ?>">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta property="og:url" content="<?= $urlHelper->baseUrl() ?>">
     <meta property="og:type" content="website">
     <meta property="og:title" content="<?= $config['site']['title'] ?>">
-    <meta property="og:description" content="<?= $meta_desc ?>">
+    <meta property="og:description" content="<?= META_DESC ?>">
     <meta property="og:image" content="">
     <title><?= $config['site']['title'] ?></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">

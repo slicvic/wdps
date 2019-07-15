@@ -8,7 +8,7 @@ $urlHelper = new UrlHelper();
 $phrases = array_slice($urlHelper->decodeCurrentSearchQuery(), 0, $config['max_phrases']);
 
 if (count($phrases) >= $config['min_phrases']) {
-    $meta_desc = str_replace('{0}', "'" . implode("' or '", $phrases) . "'", $config['site']['meta_desc_s']);
+    define('META_DESC', str_replace('{0}', "'" . implode("' or '", $phrases) . "'", $config['site']['meta_desc_q']));
 } else {
-    $meta_desc = $config['site']['meta_desc'];
+    define('META_DESC', $config['site']['meta_desc']);
 }
