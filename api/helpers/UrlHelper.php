@@ -2,7 +2,7 @@
 
 class UrlHelper
 {
-    const SHARE_URL_QUERY_DELIMITER = '--or--';
+    const SHARE_URL_QUERY_DELIMITER = '_or_';
     
     /**
      * @return string
