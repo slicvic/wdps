@@ -20,4 +20,4 @@ $config['db']['pass'] = 'secret';
 
 $config['site']['title'] = 'What do people say?';
 $config['site']['meta_desc'] = 'Search multiple phrases and see which one do most people say.';
-$config['site']['meta_desc_s'] = 'Do most people say {0}';
+$config['site']['meta_desc_q'] = 'Do most people say {0}';
