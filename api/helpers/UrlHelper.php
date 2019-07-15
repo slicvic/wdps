@@ -2,6 +2,8 @@
 
 class UrlHelper
 {
+    const SHARE_URL_QUERY_DELIMITER = '--or--';
+    
     /**
      * @return string
      */
@@ -38,7 +40,12 @@ class UrlHelper
      */
     public function createShareUrl(array $phrases)
     {  
-        return $this->baseUrl() . '?q='. urlencode(implode('|', $phrases));
+        $encPhrases = [];
+        foreach ($phrases as $phrase) {
+            $encPhrases[] = urlencode(str_replace(' ', '-', trim($phrase)));
+        }
+        $shareUrl = $this->baseUrl() . '/' . implode(self::SHARE_URL_QUERY_DELIMITER, $encPhrases);
+        return $shareUrl;
     }
 
     /**
@@ -48,14 +55,14 @@ class UrlHelper
     public function decodeSearchQuery($query)
     {
         $phrases = [];
-        if (!is_string($query)) {
+        if (empty($query) || !is_string($query)) {
             return $phrases;
         }
-        $rawPhrases = explode('|', urldecode($query));
+        $rawPhrases = explode(self::SHARE_URL_QUERY_DELIMITER, urldecode($query));
         if (is_array($rawPhrases)) {
             foreach ($rawPhrases as $phrase) {
-                if (is_string($phrase)) {
-                    $phrases[] = htmlspecialchars(trim($phrase));
+                if (!empty($phrase) && is_string($phrase)) {
+                    $phrases[] = htmlspecialchars(trim(str_replace('-', ' ', $phrase)));
                 }
             }
         }
@@ -67,7 +74,11 @@ class UrlHelper
      */
     public function decodeCurrentSearchQuery()
     {
-        $phrases = !empty($_GET['q']) ? $this->decodeSearchQuery($_GET['q']) : [];
+        $phrases = [];
+        if (!empty($_SERVER['REQUEST_URI'])) {
+            $requestUri = trim($_SERVER['REQUEST_URI'], " \t\n\r\0\x0B/");
+            $phrases = $this->decodeSearchQuery($requestUri);
+        }
         return $phrases;
     }
 }
