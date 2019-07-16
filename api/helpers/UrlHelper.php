@@ -58,7 +58,15 @@ class UrlHelper
         if (empty($query) || !is_string($query)) {
             return $phrases;
         }
-        $rawPhrases = explode(self::SHARE_URL_QUERY_DELIMITER, urldecode($query));
+        $delimiter = '';
+        if (strpos($query, self::SHARE_URL_QUERY_DELIMITER) !== false) {
+            $delimiter = self::SHARE_URL_QUERY_DELIMITER;
+        } else if (strpos($query, '--or--') !== false) {
+            $delimiter = '--or--';
+        } else if (strpos($query, '_or_') !== false) {
+            $delimiter = '_or_';
+        }
+        $rawPhrases = explode($delimiter, urldecode($query));
         if (is_array($rawPhrases)) {
             foreach ($rawPhrases as $phrase) {
                 if (!empty($phrase) && is_string($phrase)) {
