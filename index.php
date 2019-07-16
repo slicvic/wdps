@@ -133,7 +133,7 @@
         };
         <?php 
             foreach ($phrases as $p) {
-                echo "appConfig.phrases.push('$p');";
+                echo "appConfig.phrases.push(\"$p\");";
             }
         ?>
     </script>

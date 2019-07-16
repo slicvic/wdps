@@ -70,7 +70,7 @@ class UrlHelper
         if (is_array($rawPhrases)) {
             foreach ($rawPhrases as $phrase) {
                 if (!empty($phrase) && is_string($phrase)) {
-                    $phrases[] = htmlspecialchars(trim(str_replace('-', ' ', $phrase)));
+                    $phrases[] = htmlspecialchars(trim(str_replace(['-', '"'], [' ', "'"], $phrase)));
                 }
             }
         }
