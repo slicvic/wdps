@@ -110,18 +110,19 @@
                 this.showResults = false;
                 this.searching = true;
 
-                var data = [];
+                var params = [];
                 this.phrases.forEach(function(phrase) {
-                    data.push('q[]=' + phrase);
+                    params.push('q[]=' + phrase);
                 });
 
                 if (config.referer) {
-                    data.push('referer=' + config.referer);
+                    params.push('referer=' + config.referer);
+                    config.referer = '';
                 }
 
                 var that = this;
 
-                $.getJSON('/api/search.php', data.join('&')).always(function(response) {
+                $.getJSON('/api/search.php', params.join('&')).always(function(response) {
                     if (!(typeof response === 'object' && typeof response.results === 'object')) {
                         that.results = false;
                         that.searching = false;
