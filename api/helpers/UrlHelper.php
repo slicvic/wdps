@@ -42,7 +42,7 @@ class UrlHelper
     {  
         $encPhrases = [];
         foreach ($phrases as $phrase) {
-            $encPhrases[] = urlencode(str_replace(' ', '-', trim($phrase)));
+            $encPhrases[] = urlencode(str_replace(' ', '-', strtolower(trim($phrase))));
         }
         $shareUrl = $this->baseUrl() . '/' . implode(self::SHARE_URL_QUERY_DELIMITER, $encPhrases);
         return $shareUrl;
