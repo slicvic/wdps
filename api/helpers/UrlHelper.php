@@ -2,7 +2,7 @@
 
 class UrlHelper
 {
-    const SHARE_URL_QUERY_DELIMITER = '_or_';
+    const SHARE_URL_QUERY_DELIMITER = '-or-';
     
     /**
      * @return string
@@ -42,7 +42,7 @@ class UrlHelper
     {  
         $encPhrases = [];
         foreach ($phrases as $phrase) {
-            $encPhrases[] = urlencode(str_replace(' ', '-', strtolower(trim($phrase))));
+            $encPhrases[] = urlencode(str_replace(' ', '-', trim($phrase)));
         }
         $shareUrl = $this->baseUrl() . '/' . implode(self::SHARE_URL_QUERY_DELIMITER, $encPhrases);
         return $shareUrl;
@@ -58,11 +58,17 @@ class UrlHelper
         if (empty($query) || !is_string($query)) {
             return $phrases;
         }
-        $rawPhrases = explode(self::SHARE_URL_QUERY_DELIMITER, urldecode($query));
+        $delimeter = '';
+        if (strpos($query, self::SHARE_URL_QUERY_DELIMITER) !== false) {
+            $delimeter = self::SHARE_URL_QUERY_DELIMITER;
+        } else if (strpos($query, '_or_') !== false) {
+            $delimeter = '_or_';
+        }
+        $rawPhrases = explode($delimeter, urldecode($query));
         if (is_array($rawPhrases)) {
             foreach ($rawPhrases as $phrase) {
                 if (!empty($phrase) && is_string($phrase)) {
-                    $phrases[] = htmlspecialchars(trim(str_replace(['-', '"'], [' ', "'"], $phrase)));
+                    $phrases[] = htmlspecialchars(str_replace(['-', '"'], [' ', "'"], trim($phrase)));
                 }
             }
         }
