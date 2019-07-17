@@ -40,8 +40,9 @@ foreach ($input['q'] as &$phrase) {
 try {
     $dbHelper = new DbHelper($config['db']['host'], $config['db']['name'], $config['db']['user'], $config['db']['pass']);
     $dbHelper->logSearch(
-        json_encode($input['q']), 
-        isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : ''
+        implode(', ', $input['q']), 
+        isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '',
+        isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : ''
     );
 } catch (Exception $e) {}
 
