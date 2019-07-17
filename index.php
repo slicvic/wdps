@@ -129,6 +129,7 @@
             minPhrases: <?= $config['min_phrases'] ?>,
             maxPhrases: <?= $config['max_phrases'] ?>,
             examples: <?= json_encode($config['examples']) ?>,
+            referer: '<?= isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '' ?>',
             phrases: []
         };
         try {

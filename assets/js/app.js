@@ -110,14 +110,18 @@
                 this.showResults = false;
                 this.searching = true;
 
-                var queryParams = [];
+                var data = [];
                 this.phrases.forEach(function(phrase) {
-                    queryParams.push('q[]=' + phrase);
+                    data.push('q[]=' + phrase);
                 });
+
+                if (config.referer) {
+                    data.push('referer=' + config.referer);
+                }
 
                 var that = this;
 
-                $.getJSON('/api/search.php', queryParams.join('&')).always(function(response) {
+                $.getJSON('/api/search.php', data.join('&')).always(function(response) {
                     if (!(typeof response === 'object' && typeof response.results === 'object')) {
                         that.results = false;
                         that.searching = false;
