@@ -68,8 +68,8 @@ a:visited {
     text-align: center;
 }
 
-.form__input-row {
-    margin-bottom: 1.5rem;
+.form__vs {
+    margin: .5rem 0;
 }
 
 .form__input.is-invalid {
@@ -104,7 +104,7 @@ a:visited {
     margin: 0 auto;
     background-color: map-get($colors, 'secondary');
     color: #fff;
-    margin-top: 1rem;
+    margin-top: 1.5rem;
 }
 
 .form__search-btn:hover {

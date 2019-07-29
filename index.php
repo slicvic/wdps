@@ -54,28 +54,31 @@
         <main class="row">
             <div class="col-md-6 mx-auto">
                 <form class="form" action="search.php" method="post" v-show="!showResults">
-                    <div class="d-flex form__input-row" v-for="(phrase, i) in phrases">
-                        <div class="flex-grow-1">
-                            <input
-                                class="form__input form-control form-control-lg js-phrase-input"
-                                type="text"
-                                maxlength="100"
-                                v-bind:placeholder="placeholders[i]"
-                                v-bind:class="{ 'is-invalid': validationErrors[i] }"
-                                v-bind:disabled="searching"
-                                v-on:keyup="handlePhraseInputKeyup(i)"
-                                v-model="phrases[i]">
-                            <div class="invalid-feedback" v-show="validationErrors[i]">{{ validationErrors[i] }}</div>
-                        </div>
-                        <div class="flex-shrink-1 align-self-center">
-                            <button 
-                                type="button"
-                                class="form__remove-btn btn btn-link"
-                                v-on:click="removePhrase(i)"
-                                v-show="showRemovePhraseBtn"
-                                v-bind:disabled="searching">
-                                <i class="fa fa-times"></i>
-                            </button>
+                    <div  v-for="(phrase, i) in phrases">
+                        <div class="form__vs" v-show="i > 0">vs.</div>
+                        <div class="d-flex form__input-row">
+                            <div class="flex-grow-1">
+                                <input
+                                    class="form__input form-control form-control-lg js-phrase-input"
+                                    type="text"
+                                    maxlength="100"
+                                    v-bind:placeholder="placeholders[i]"
+                                    v-bind:class="{ 'is-invalid': validationErrors[i] }"
+                                    v-bind:disabled="searching"
+                                    v-on:keyup="handlePhraseInputKeyup(i)"
+                                    v-model="phrases[i]">
+                                <div class="invalid-feedback" v-show="validationErrors[i]">{{ validationErrors[i] }}</div>
+                            </div>
+                            <div class="flex-shrink-1 align-self-center">
+                                <button 
+                                    type="button"
+                                    class="form__remove-btn btn btn-link"
+                                    v-on:click="removePhrase(i)"
+                                    v-show="showRemovePhraseBtn"
+                                    v-bind:disabled="searching">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <button

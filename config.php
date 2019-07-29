@@ -19,5 +19,5 @@ $config['db']['user'] = 'homestead';
 $config['db']['pass'] = 'secret';
 
 $config['site']['title'] = 'What do people say?';
-$config['site']['meta_desc'] = 'Search multiple phrases and see which one do most people say.';
-$config['site']['meta_desc_q'] = 'Do most people say {0}';
+$config['site']['meta_desc'] = "Search multiple phrases and see which one is more popular. For example, do most people say 'Trump is Smart' or 'Trump is Dumb'";
+$config['site']['meta_desc_q'] = '{0}?';
