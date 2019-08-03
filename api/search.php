@@ -20,19 +20,17 @@ if (!$validInput) {
 $input['q'] = array_slice($input['q'], 0, $config['max_phrases']);
 
 // Perform searches and tally totals
-$totalResults = 0;
-$totalResultsByPhrase = [];
+$total = 0;
+$totalByPhrase = [];
 $searchHelper = new SearchHelper($config['search_engine']);
 
 foreach ($input['q'] as &$phrase) {
     $phrase = substr($phrase, 0, $config['phrase_max_length'] );
-    $twitterTotal = $searchHelper->getResultCount($phrase, 'twitter.com');
-    $redditTotal = $searchHelper->getResultCount($phrase, 'reddit.com');
-    $total = $twitterTotal + $redditTotal;
-    $totalResults += $total;
-    $totalResultsByPhrase[] = [
+    $phraseTotal = $searchHelper->getResultCount($phrase);
+    $total += $phraseTotal;
+    $totalByPhrase[] = [
         'phrase' => $phrase,
-        'total' => $total
+        'total' => $phraseTotal
     ];
 }
 
@@ -47,12 +45,12 @@ try {
 } catch (Exception $e) {}
 
 // Exit early if no results
-if ($totalResults < 1) {
+if ($total < 1) {
     exit(json_encode(['results' => false]));
 }
 
 // Sort totals desc
-usort($totalResultsByPhrase, function($a, $b) {
+usort($totalByPhrase, function($a, $b) {
     if ($a['total'] === $b['total']) {
         return 0;
     }
@@ -67,10 +65,10 @@ $response['share_url'] = $urlHelper->createShareUrl($input['q']);
 $response['results'] = [];
 
 // Calculate percents
-foreach ($totalResultsByPhrase as $t) {
+foreach ($totalByPhrase as $t) {
     $response['results'][] = [
         'phrase' => $t['phrase'],
-        'percent' => round(($t['total'] / $totalResults) * 100, 2)
+        'percent' => round(($t['total'] / $total) * 100, 2)
     ];
 }
 

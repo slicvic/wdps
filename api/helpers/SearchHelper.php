@@ -25,9 +25,9 @@ class SearchHelper
      */
     public function getResultCount($phrase, $site = '')
     {
-        $q = '"' . $phrase . '"';
+        $q = '"' . urlencode($phrase) . '"';
         if (!empty($site)) {
-            $q = "site:$site $q";
+            $q = urlencode("site:$site") . ' ' . $q;
         }
         $methodName = 'get' . ucfirst($this->searchEngine) . 'ResultCount';
         return $this->$methodName($q);
@@ -55,7 +55,7 @@ class SearchHelper
      */
     protected function getGoogleResultCount($q)
     {
-        $response = $this->curl('https://www.google.com/search?q=' . urlencode($q));
+        $response = $this->curl('https://www.google.com/search?q=' . $q);
         preg_match('/<div id="resultStats">About ([0-9,]+) results/', $response, $matches, PREG_OFFSET_CAPTURE);
         if (!empty($matches[1][0])) {
             return preg_replace('/[^0-9]/', '', $matches[1][0]);
